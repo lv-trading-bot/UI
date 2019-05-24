@@ -15,13 +15,13 @@ export default {
       icon: 'icon-speedometer',
     },
     {
-      name: 'Trade',
-      url: '/trade',
+      name: 'Trigger',
+      url: '/trigger',
       icon: 'icon-speedometer',
     },
     {
-      name: 'Trigger',
-      url: '/trigger',
+      name: 'Trade',
+      url: '/trade',
       icon: 'icon-speedometer',
     },
     // {

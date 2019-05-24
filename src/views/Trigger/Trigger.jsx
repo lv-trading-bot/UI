@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Card, CardBody, CardHeader, Col, Row, Table, FormGroup, Label, Input } from 'reactstrap';
+import { Card, CardBody, CardHeader, Col, Row, Table, FormGroup, Label, Input, Badge } from 'reactstrap';
 import _ from 'lodash';
 import { genarateAssetCurrencyId } from '../../utils';
 
@@ -153,7 +153,7 @@ class Trigger extends Component {
         return this.renderLoading();
       }
       if (props[assetCurrencyId].isError) {
-        return this.renderError();
+        return this.renderError(props[assetCurrencyId].errorMessage);
       }
       let runningTriggers = _.filter(props[assetCurrencyId].triggers, trigger => {
         return !trigger.what;
@@ -207,7 +207,7 @@ class Trigger extends Component {
         return this.renderLoading();
       }
       if (props[assetCurrencyId].isError) {
-        return this.renderError();
+        return this.renderError(props[assetCurrencyId].errorMessage);
       }
       let completedTriggers = _.filter(props[assetCurrencyId].triggers, trigger => {
         return trigger.what;
@@ -233,7 +233,9 @@ class Trigger extends Component {
               return (
                 <tr key={index}>
                   <td>{trigger.id}</td>
-                  <td>{trigger.what}</td>
+                  <td>{(trigger.what.toLowerCase() === 'takeprofit' ? 
+                    (<Badge color="success">{trigger.what}</Badge>) 
+                    : (<Badge color="danger">{trigger.what}</Badge>))}</td>
                   <td>{trigger.meta.initialPrice}</td>
                   <td>{trigger.meta.exitPrice}</td>
                   <td>{`${trigger.meta.trend.toFixed(5)} %`}</td>

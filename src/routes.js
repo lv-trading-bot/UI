@@ -24,7 +24,7 @@ import React from 'react';
 // const Charts = React.lazy(() => import('./views/Charts'));
 const Dashboard = React.lazy(() => import('./views/Dashboard'));
 const Overview = React.lazy(() => import('./containers/Overview'));
-const Trade = React.lazy(() => import('./views/Trade'));
+const Trade = React.lazy(() => import('./containers/Trade'));
 const Trigger = React.lazy(() => import('./containers/Trigger'));
 const CoreUIIcons = React.lazy(() => import('./views/Icons/CoreUIIcons'));
 // const Flags = React.lazy(() => import('./views/Icons/Flags'));
