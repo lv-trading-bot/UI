@@ -5,11 +5,11 @@ export const triggerAction = {
     BEGIN_LOAD_TRIGGER: "BEGIN_LOAD_TRIGGER",
     LOAD_TRIGGER_DONE: "LOAD_TRIGGER_DONE",
     LOAD_TRIGGER_ERROR: "LOAD_TRIGGER_ERROR",
-    CHANGE_PAIR: "CHANGE_PAIR"
+    CHANGE_PAIR_TRIGGER: "CHANGE_PAIR_TRIGGER"
 }
 
 export const changePair = (id, asset_name, currency_name) => ({
-    type: triggerAction.CHANGE_PAIR,
+    type: triggerAction.CHANGE_PAIR_TRIGGER,
     id,
     asset_name,
     currency_name

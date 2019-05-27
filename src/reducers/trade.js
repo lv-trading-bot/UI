@@ -19,7 +19,7 @@ const initialState = {
 export default (state = initialState, action) => {
     let assetCurrencyId = genarateAssetCurrencyId(action.asset_name, action.currency_name, action.id);
     switch (action.type) {
-        case tradeAction.CHANGE_PAIR: {
+        case tradeAction.CHANGE_PAIR_TRADE: {
             return {
                 ...state,
                 pair: {
