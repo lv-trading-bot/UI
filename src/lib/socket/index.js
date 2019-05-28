@@ -1,6 +1,6 @@
 import io from 'socket.io-client';
 
-const chanel = "uiChanle";
+const chanel = "uiChannel";
 const type = 'ui'
 
 let socket;

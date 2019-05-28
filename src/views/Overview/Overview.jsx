@@ -31,6 +31,7 @@ class Overview extends Component {
 
   componentDidMount() {
     this.props.loadPortfolio();
+    this.props.loadStatus();
   }
 
   render() {
@@ -73,7 +74,7 @@ class Overview extends Component {
                       currency_name={pair.currency_name}
                       price={pair.price}
                       last_update={pair.last_update}
-                      status={pair.status}
+                      props_status={this.props.status}
                     />))}
                   </tbody>
                 </Table>

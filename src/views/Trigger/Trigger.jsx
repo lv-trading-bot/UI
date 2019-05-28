@@ -229,12 +229,14 @@ class Trigger extends Component {
             </tr>
           </thead>
           <tbody>
-            {_.map(completedTriggers, (trigger, index) => {
+            {_.map(_.reverse(completedTriggers), (trigger, index) => {
               return (
                 <tr key={index}>
                   <td>{trigger.id}</td>
                   <td>{(trigger.what.toLowerCase() === 'takeprofit' ? 
                     (<Badge color="success">{trigger.what}</Badge>) 
+                    : trigger.what.toLowerCase() === 'expires' ? 
+                    (<Badge color="warning">{trigger.what}</Badge>)
                     : (<Badge color="danger">{trigger.what}</Badge>))}</td>
                   <td>{trigger.meta.initialPrice}</td>
                   <td>{trigger.meta.exitPrice}</td>

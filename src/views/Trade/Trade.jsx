@@ -149,7 +149,7 @@ class Trade extends Component {
             </tr>
           </thead>
           <tbody>
-            {_.map(props[assetCurrencyId].trades, (trade, index) => {
+            {_.map(_.reverse(_.cloneDeep(props[assetCurrencyId].trades)), (trade, index) => {
               return (
                 <tr key={index}>
                   <td>{trade.id}</td>

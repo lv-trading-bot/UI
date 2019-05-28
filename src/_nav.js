@@ -17,12 +17,12 @@ export default {
     {
       name: 'Trigger',
       url: '/trigger',
-      icon: 'icon-speedometer',
+      icon: 'icon-puzzle',
     },
     {
       name: 'Trade',
       url: '/trade',
-      icon: 'icon-speedometer',
+      icon: 'icon-list',
     },
     // {
     //   title: true,
