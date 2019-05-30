@@ -1,30 +1,11 @@
 import React, { Component } from 'react';
-import { Card, CardBody, CardHeader, Col, Row, Table, Badge, FormGroup, Label, Input } from 'reactstrap';
+import { Card, CardBody, CardHeader, Col, Row, Table, Badge } from 'reactstrap';
 import _ from 'lodash';
 import { genarateAssetCurrencyId } from '../../utils';
+import Filter from '../../components/Filter';
 
 class Trade extends Component {
-  /**
-   * 
-  {
-      "_id" : ObjectId("5ce2ce163e9ff300102ecbad"),
-      "id" : "trade-4",
-      "adviceId" : "advice-2",
-      "action" : "sell",
-      "cost" : 0.1018293803882,
-      "amount" : 0.01302891,
-      "price" : 7821,
-      "portfolio" : {
-          "asset" : 0.02574674,
-          "currency" : 4801.727551
-      },
-      "balance" : 5003.09280454,
-      "date" : "2019-05-20T15:56:00.000Z",
-      "effectivePrice" : 7807.83281240041,
-      "feePercent" : 0.1,
-      "amountWithFee" : 101.727551
-  }
-   */
+
   renderLoading = () => <div className="animated fadeIn pt-1 text-center">Loading...</div>
 
   renderError = (error) => <div className="animated fadeIn pt-1 text-center text-danger">{error}</div>
@@ -32,8 +13,16 @@ class Trade extends Component {
   renderRequireChoose = () => <div className="animated fadeIn pt-1 text-center">Please Choose a Pair.</div>
 
   componentDidMount() {
-    if (!this.props.overview.idLoaded) {
+    let curPair = this.props.pair;
+    if (!this.props.overview.isLoaded) {
       this.props.loadPortfolio();
+    } else if (curPair.id === null
+      && curPair.asset_name === null
+      && curPair.currency_name === null
+      && this.props.overview.portfolios.length > 0){
+      this.props.changePair(this.props.overview.portfolios[0].id,
+        this.props.overview.portfolios[0].asset_name,
+        this.props.overview.portfolios[0].currency_name)
     }
   }
 
@@ -59,66 +48,6 @@ class Trade extends Component {
       if (!nextProps[assetCurrencyId] || (!nextProps[assetCurrencyId].isLoaded && !nextProps[assetCurrencyId].isLoading)) {
         this.props.loadTrade(nextPair.id, nextPair.asset_name, nextPair.currency_name);
       }
-    }
-  }
-
-  renderOptionAssetName = () => {
-    let listAssetNameFromPortfolio = _.map(this.props.overview.portfolios, pair => {
-      return pair.asset_name;
-    })
-
-    listAssetNameFromPortfolio = _.uniq(listAssetNameFromPortfolio);
-    return _.map(listAssetNameFromPortfolio, (asset_name, index) => {
-      return <option key={index} value={asset_name}>{asset_name}</option>;
-    })
-  }
-
-  renderOptionCurrencyName = () => {
-    let listCurrency = _.filter(this.props.overview.portfolios, pair => {
-      return pair.asset_name === this.props.pair.asset_name;
-    })
-    let listCurrencyNameFromPortfolio = _.map(listCurrency, pair => {
-      return pair.currency_name;
-    })
-
-    listCurrencyNameFromPortfolio = _.uniq(listCurrencyNameFromPortfolio);
-    return _.map(listCurrencyNameFromPortfolio, (currency_name, index) => {
-      return <option key={index} value={currency_name}>{currency_name}</option>;
-    })
-  }
-
-  renderOptionId = () => {
-    let listId = _.filter(this.props.overview.portfolios, pair => {
-      return (pair.asset_name === this.props.pair.asset_name
-        && pair.currency_name === this.props.pair.currency_name);
-    })
-    let listIdFromPortfolio = _.map(listId, pair => {
-      return pair.id;
-    })
-
-    return _.map(listIdFromPortfolio, (id, index) => {
-      return <option key={index} value={id}>{id}</option>;
-    })
-  }
-
-  onChangeFilter(type, _value) {
-    let value = _value;
-    if (_value === "null") {
-      value = null;
-    }
-    switch (type) {
-      case 'asset_name':
-        this.props.changePair(null, value, null);
-        break;
-      case 'currency_name':
-        this.props.changePair(null, this.props.pair.asset_name, value);
-        break;
-      case 'id':
-        this.props.changePair(value, this.props.pair.asset_name, this.props.pair.currency_name);
-        break;
-
-      default:
-        break;
     }
   }
 
@@ -181,41 +110,12 @@ class Trade extends Component {
           <Col sm={12}>
             <Card>
               <CardHeader>
-                <Row>
-                  <Col xs="2"><strong><i className="icon-info pr-1"></i>Trigger</strong></Col>
-                  <Col xs="3">
-                    <FormGroup>
-                      <Label htmlFor="casset">Asset Name</Label>
-                      <Input type="select" name="casset" id="casset"
-                        value={this.props.pair.asset_name || ""}
-                        onChange={(e) => this.onChangeFilter("asset_name", e.target.value)}>
-                        {this.renderOptionAssetName()}
-                      </Input>
-                    </FormGroup>
-                  </Col>
-                  <Col xs="3">
-                    <FormGroup>
-                      <Label htmlFor="ccurrency">Currency Name</Label>
-                      <Input type="select" name="ccurrency" id="ccurrency"
-                        value={this.props.pair.currency_name || ""}
-                        onChange={(e) => this.onChangeFilter("currency_name", e.target.value)}>
-                        <option value={"null"}>Choose Currency Name</option>
-                        {this.renderOptionCurrencyName()}
-                      </Input>
-                    </FormGroup>
-                  </Col>
-                  <Col xs="4">
-                    <FormGroup>
-                      <Label htmlFor="cid">Id</Label>
-                      <Input type="select" name="cid" id="cid"
-                        value={this.props.pair.id || ""}
-                        onChange={(e) => this.onChangeFilter("id", e.target.value)}>
-                        <option value={"null"}>Choose id</option>
-                        {this.renderOptionId()}
-                      </Input>
-                    </FormGroup>
-                  </Col>
-                </Row>
+                <Filter
+                  overview={this.props.overview}
+                  pair={this.props.pair}
+                  changePair={this.props.changePair}
+                  name={"Trade"}
+                />
               </CardHeader>
               <CardBody>
                 {this.renderTableTrade()}

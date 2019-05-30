@@ -1,7 +1,8 @@
 import {combineReducers} from 'redux';
 import overview from './overview';
+import config from './config';
 import status from './status';
 import trigger from './trigger';
 import trade from './trade';
 
-export default combineReducers({overview, status, trigger, trade});
+export default combineReducers({overview, config, status, trigger, trade});

@@ -1,52 +1,10 @@
 import React, { Component } from 'react';
-import { Card, CardBody, CardHeader, Col, Row, Table, FormGroup, Label, Input, Badge } from 'reactstrap';
+import { Card, CardBody, CardHeader, Col, Row, Table, Badge } from 'reactstrap';
 import _ from 'lodash';
 import { genarateAssetCurrencyId } from '../../utils';
+import Filter from '../../components/Filter';
 
 class Trigger extends Component {
-  /**
-   * 
-  running trigger
-  {
-      "_id" : ObjectId("5ce32a383e9ff300102ecbc0"),
-      "id" : "trigger-9",
-      "at" : "2019-05-20T22:29:00.000Z",
-      "type" : "doubleStop",
-      "properties" : {
-          "initialStart" : "2019-05-20T22:29:00.000Z",
-          "initialPrice" : 8005.44,
-          "currentInitialPrice" : 7969.14,
-          "stopLoss" : -10,
-          "takeProfit" : 2,
-          "expires" : "2019-05-22T20:29:00.000Z",
-          "assetAmount" : 0.01248016
-      }
-  }
-
-  completed trigger
-  {
-    "_id" : ObjectId("5ce30e1a3e9ff300102ecbb7"),
-    "what" : "TAKEPROFIT",
-    "meta" : {
-        "initialStart" : "2019-05-20T20:29:00.000Z",
-        "initialPrice" : 7783.97,
-        "trend" : 1.93320375078526,
-        "expires" : "2019-05-21T20:29:00.000Z",
-        "exitPrice" : 7934.45,
-        "exitCandle" : {
-            "start" : "2019-05-20T20:46:00.000Z",
-            "open" : 7919,
-            "high" : 7939.99,
-            "low" : 7906.32,
-            "close" : 7934.45,
-            "vwp" : 7923.77196839963,
-            "volume" : 195.018281,
-            "trades" : 1439
-        }
-    },
-    "id" : "trigger-8"
-}
-   */
 
   renderLoading = () => <div className="animated fadeIn pt-1 text-center">Loading...</div>
 
@@ -55,8 +13,16 @@ class Trigger extends Component {
   renderRequireChoose = () => <div className="animated fadeIn pt-1 text-center">Please Choose a Pair.</div>
 
   componentDidMount() {
-    if (!this.props.overview.idLoaded) {
+    let curPair = this.props.pair;
+    if (!this.props.overview.isLoaded) {
       this.props.loadPortfolio();
+    } else if (curPair.id === null
+      && curPair.asset_name === null
+      && curPair.currency_name === null
+      && this.props.overview.portfolios.length > 0) {
+      this.props.changePair(this.props.overview.portfolios[0].id,
+        this.props.overview.portfolios[0].asset_name,
+        this.props.overview.portfolios[0].currency_name)
     }
   }
 
@@ -85,68 +51,9 @@ class Trigger extends Component {
     }
   }
 
-  renderOptionAssetName = () => {
-    let listAssetNameFromPortfolio = _.map(this.props.overview.portfolios, pair => {
-      return pair.asset_name;
-    })
-
-    listAssetNameFromPortfolio = _.uniq(listAssetNameFromPortfolio);
-    return _.map(listAssetNameFromPortfolio, (asset_name, index) => {
-      return <option key={index} value={asset_name}>{asset_name}</option>;
-    })
-  }
-
-  renderOptionCurrencyName = () => {
-    let listCurrency = _.filter(this.props.overview.portfolios, pair => {
-      return pair.asset_name === this.props.pair.asset_name;
-    })
-    let listCurrencyNameFromPortfolio = _.map(listCurrency, pair => {
-      return pair.currency_name;
-    })
-
-    listCurrencyNameFromPortfolio = _.uniq(listCurrencyNameFromPortfolio);
-    return _.map(listCurrencyNameFromPortfolio, (currency_name, index) => {
-      return <option key={index} value={currency_name}>{currency_name}</option>;
-    })
-  }
-
-  renderOptionId = () => {
-    let listId = _.filter(this.props.overview.portfolios, pair => {
-      return (pair.asset_name === this.props.pair.asset_name
-        && pair.currency_name === this.props.pair.currency_name);
-    })
-    let listIdFromPortfolio = _.map(listId, pair => {
-      return pair.id;
-    })
-
-    return _.map(listIdFromPortfolio, (id, index) => {
-      return <option key={index} value={id}>{id}</option>;
-    })
-  }
-
-  onChangeFilter(type, _value) {
-    let value = _value;
-    if (_value === "null") {
-      value = null;
-    }
-    switch (type) {
-      case 'asset_name':
-        this.props.changePair(null, value, null);
-        break;
-      case 'currency_name':
-        this.props.changePair(null, this.props.pair.asset_name, value);
-        break;
-      case 'id':
-        this.props.changePair(value, this.props.pair.asset_name, this.props.pair.currency_name);
-        break;
-
-      default:
-        break;
-    }
-  }
-
   renderTableRunningTrigger = () => {
     let curPair = this.props.pair, props = this.props;
+    let curPortfolio = _.find(this.props.overview.portfolios, portfolio => portfolio.id === curPair.id);
     if (curPair.asset_name && curPair.currency_name && curPair.id) {
       let assetCurrencyId = genarateAssetCurrencyId(curPair.asset_name, curPair.currency_name, curPair.id);
       if (!props[assetCurrencyId] || props[assetCurrencyId].isLoading) {
@@ -187,7 +94,7 @@ class Trigger extends Component {
                   <td>{trigger.properties.takeProfit}</td>
                   <td>{trigger.properties.expires}</td>
                   <td>{`${trigger.properties.assetAmount} ${curPair.asset_name}`}</td>
-                  <td>{"{null}"}</td>
+                  <td>{`${(100 * ((parseFloat(curPortfolio.price) - parseFloat(trigger.properties.currentInitialPrice)) / parseFloat(trigger.properties.currentInitialPrice))).toFixed(5)} %`}</td>
                   <td>{trigger.at}</td>
                 </tr>
               )
@@ -233,11 +140,11 @@ class Trigger extends Component {
               return (
                 <tr key={index}>
                   <td>{trigger.id}</td>
-                  <td>{(trigger.what.toLowerCase() === 'takeprofit' ? 
-                    (<Badge color="success">{trigger.what}</Badge>) 
-                    : trigger.what.toLowerCase() === 'expires' ? 
-                    (<Badge color="warning">{trigger.what}</Badge>)
-                    : (<Badge color="danger">{trigger.what}</Badge>))}</td>
+                  <td>{(trigger.what.toLowerCase() === 'takeprofit' ?
+                    (<Badge color="success">{trigger.what}</Badge>)
+                    : trigger.what.toLowerCase() === 'expires' ?
+                      (<Badge color="warning">{trigger.what}</Badge>)
+                      : (<Badge color="danger">{trigger.what}</Badge>))}</td>
                   <td>{trigger.meta.initialPrice}</td>
                   <td>{trigger.meta.exitPrice}</td>
                   <td>{`${trigger.meta.trend.toFixed(5)} %`}</td>
@@ -262,41 +169,12 @@ class Trigger extends Component {
           <Col sm={12}>
             <Card>
               <CardHeader>
-                <Row>
-                  <Col xs="2"><strong><i className="icon-info pr-1"></i>Trigger</strong></Col>
-                  <Col xs="3">
-                    <FormGroup>
-                      <Label htmlFor="casset">Asset Name</Label>
-                      <Input type="select" name="casset" id="casset"
-                        value={this.props.pair.asset_name || ""}
-                        onChange={(e) => this.onChangeFilter("asset_name", e.target.value)}>
-                        {this.renderOptionAssetName()}
-                      </Input>
-                    </FormGroup>
-                  </Col>
-                  <Col xs="3">
-                    <FormGroup>
-                      <Label htmlFor="ccurrency">Currency Name</Label>
-                      <Input type="select" name="ccurrency" id="ccurrency"
-                        value={this.props.pair.currency_name || ""}
-                        onChange={(e) => this.onChangeFilter("currency_name", e.target.value)}>
-                        <option value={"null"}>Choose Currency Name</option>
-                        {this.renderOptionCurrencyName()}
-                      </Input>
-                    </FormGroup>
-                  </Col>
-                  <Col xs="4">
-                    <FormGroup>
-                      <Label htmlFor="cid">Id</Label>
-                      <Input type="select" name="cid" id="cid"
-                        value={this.props.pair.id || ""}
-                        onChange={(e) => this.onChangeFilter("id", e.target.value)}>
-                        <option value={"null"}>Choose id</option>
-                        {this.renderOptionId()}
-                      </Input>
-                    </FormGroup>
-                  </Col>
-                </Row>
+                <Filter
+                  overview={this.props.overview}
+                  pair={this.props.pair}
+                  changePair={this.props.changePair}
+                  name={"Trigger"}
+                />
               </CardHeader>
               <CardBody>
                 <div>
@@ -306,16 +184,6 @@ class Trigger extends Component {
                 <div>
                   <strong>Completed Trigger</strong>
                   {this.renderTableCompletedTrigger()}
-                  {/* <Pagination>
-                  <PaginationItem disabled><PaginationLink previous tag="button">Prev</PaginationLink></PaginationItem>
-                  <PaginationItem active>
-                    <PaginationLink tag="button">1</PaginationLink>
-                  </PaginationItem>
-                  <PaginationItem><PaginationLink tag="button">2</PaginationLink></PaginationItem>
-                  <PaginationItem><PaginationLink tag="button">3</PaginationLink></PaginationItem>
-                  <PaginationItem><PaginationLink tag="button">4</PaginationLink></PaginationItem>
-                  <PaginationItem><PaginationLink next tag="button">Next</PaginationLink></PaginationItem>
-                </Pagination> */}
                 </div>
               </CardBody>
             </Card>
