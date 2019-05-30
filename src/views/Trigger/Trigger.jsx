@@ -51,9 +51,71 @@ class Trigger extends Component {
     }
   }
 
+  renderTableSumary = () => {
+    let curPair = this.props.pair, props = this.props;
+
+    if (curPair.asset_name && curPair.currency_name && curPair.id) {
+      let assetCurrencyId = genarateAssetCurrencyId(curPair.asset_name, curPair.currency_name, curPair.id);
+
+      if (!props[assetCurrencyId] || props[assetCurrencyId].isLoading) {
+        return this.renderLoading();
+      }
+      if (props[assetCurrencyId].isError) {
+        return this.renderError(props[assetCurrencyId].errorMessage);
+      }
+
+      let listTrigger = _.get(props[assetCurrencyId], "triggers", []);
+
+      let infos = [
+        {
+          name: "Running Trigger",
+          value: _.filter(listTrigger, trigger => !trigger.what).length
+        },
+        {
+          name: "Profitable Trigger",
+          value: _.filter(listTrigger, trigger => trigger.what && trigger.what.toLowerCase() === 'takeprofit').length
+        },
+        {
+          name: "Make-loss Trigger",
+          value: _.filter(listTrigger, trigger => trigger.what && trigger.what.toLowerCase() === 'stoploss').length
+        },
+        {
+          name: "Expired Trigger",
+          value: _.filter(listTrigger, trigger => trigger.what && trigger.what.toLowerCase() === 'expires').length
+        },
+        {
+          name: "Total",
+          value: listTrigger.length
+        }
+      ]
+
+      return (
+        <Table responsive striped>
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Value</th>
+            </tr>
+          </thead>
+          <tbody>
+            {_.map(infos, (info, index) => {
+              return (
+                <tr key={index}>
+                  <td>{info.name}</td>
+                  <td>{info.value}</td>
+                </tr>
+              )
+            })}
+          </tbody>
+        </Table>
+      )
+    }
+    return this.renderRequireChoose();
+  }
+
   renderTableRunningTrigger = () => {
     let curPair = this.props.pair, props = this.props;
-    let curPortfolio = _.find(this.props.overview.portfolios, portfolio => portfolio.id === curPair.id);
+    let curPortfolio = _.find(props.overview.portfolios, portfolio => portfolio.id === curPair.id);
     if (curPair.asset_name && curPair.currency_name && curPair.id) {
       let assetCurrencyId = genarateAssetCurrencyId(curPair.asset_name, curPair.currency_name, curPair.id);
       if (!props[assetCurrencyId] || props[assetCurrencyId].isLoading) {
@@ -177,11 +239,17 @@ class Trigger extends Component {
                 />
               </CardHeader>
               <CardBody>
-                <div>
+                <Row>
+                  <Col sm="6">
+                    <strong>Sumary</strong>
+                    {this.renderTableSumary()}
+                  </Col>
+                </Row>
+                <div className="mt-5">
                   <strong>Running Trigger</strong>
                   {this.renderTableRunningTrigger()}
                 </div>
-                <div>
+                <div className="mt-5">
                   <strong>Completed Trigger</strong>
                   {this.renderTableCompletedTrigger()}
                 </div>
