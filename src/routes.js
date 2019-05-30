@@ -24,6 +24,7 @@ import React from 'react';
 // const Charts = React.lazy(() => import('./views/Charts'));
 const Dashboard = React.lazy(() => import('./views/Dashboard'));
 const Overview = React.lazy(() => import('./containers/Overview'));
+const Status = React.lazy(() => import('./containers/Status'));
 const Trade = React.lazy(() => import('./containers/Trade'));
 const PairDetail = React.lazy(() => import('./containers/PairDetail'));
 const Trigger = React.lazy(() => import('./containers/Trigger'));
@@ -45,7 +46,8 @@ const routes = [
   { path: '/', exact: true, name: 'Home' },
   { path: '/dashboard', name: 'Dashboard', component: Dashboard },
   { path: '/overview', name: 'Overview', component: Overview },
-  { path: '/pair-detail', name: "Trade", component: PairDetail},
+  { path: '/status', name: 'Status', component: Status },
+  { path: '/pair-detail', name: "Pair Detail", component: PairDetail},
   { path: '/trade', name: "Trade", component: Trade},
   { path: '/trigger', name: "Trigger", component: Trigger},
   // { path: '/theme', exact: true, name: 'Theme', component: Colors },

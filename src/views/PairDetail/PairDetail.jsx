@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Card, CardBody, CardHeader, Col, Row, Table } from 'reactstrap';
-import ReactJson from 'react-json-view'
+import ReactJson from 'react-json-view';
 import _ from 'lodash';
 import moment from 'moment';
 import { genarateAssetCurrencyId } from '../../utils';

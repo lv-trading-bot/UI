@@ -15,6 +15,11 @@ export default {
       icon: 'icon-speedometer',
     },
     {
+      name: 'Status',
+      url: '/status',
+      icon: 'icon-speedometer',
+    },
+    {
       name: 'Pair Detail',
       url: '/pair-detail',
       icon: 'icon-speedometer',
