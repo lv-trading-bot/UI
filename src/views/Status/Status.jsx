@@ -10,7 +10,15 @@ class Status extends Component {
   renderError = (error) => <div className="animated fadeIn pt-1 text-center text-danger">{error}</div>
 
   componentDidMount() {
-    this.props.loadStatus();
+    if(!this.props.isLoaded && !this.props.isLoading) {
+      this.props.loadStatus();
+    }
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if(!nextProps.isLoaded && !nextProps.isLoading) {
+      this.props.loadStatus();
+    }
   }
 
   render() {

@@ -7,6 +7,13 @@ const initialState = {
 }
 export default (state = initialState, action) => {
     switch (action.type) {
+        case overviewAction.EXPIRED_PORTFOLIO: {
+            return {
+                ...state,
+                isLoading: false,
+                isLoaded: false
+            }
+        }
         case overviewAction.BEGIN_LOAD_PORTFOLIO:
             return {
                 ...state,

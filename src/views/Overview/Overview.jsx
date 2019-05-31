@@ -30,8 +30,21 @@ class Overview extends Component {
   renderError = (error) => <div className="animated fadeIn pt-1 text-center text-danger">{error}</div>
 
   componentDidMount() {
-    this.props.loadPortfolio();
-    this.props.loadStatus();
+    if(!this.props.isLoaded && !this.props.isLoading) {
+      this.props.loadPortfolio();
+    }
+    if(!this.props.status.isLoaded && !this.props.status.isLoading) {
+      this.props.loadStatus();
+    }
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if(!nextProps.isLoaded && !nextProps.isLoading) {
+      this.props.loadPortfolio();
+    }
+    if(!nextProps.status.isLoaded && !nextProps.status.isLoading) {
+      this.props.loadStatus();
+    }
   }
 
   render() {

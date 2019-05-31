@@ -5,8 +5,16 @@ export const adviceAction = {
     BEGIN_LOAD_ADVICE: "BEGIN_LOAD_ADVICE",
     LOAD_ADVICE_DONE: "LOAD_ADVICE_DONE",
     LOAD_ADVICE_ERROR: "LOAD_ADVICE_ERROR",
-    CHANGE_PAIR_ADVICE: "CHANGE_PAIR_ADVICE"
+    CHANGE_PAIR_ADVICE: "CHANGE_PAIR_ADVICE",
+    EXPIRED_ADVICE: "EXPIRED_ADVICE"
 }
+
+export const expiredAdvice = (id, asset_name, currency_name) => ({
+    type: adviceAction.EXPIRED_ADVICE,
+    id,
+    asset_name,
+    currency_name
+})
 
 export const changePair = (id, asset_name, currency_name) => ({
     type: adviceAction.CHANGE_PAIR_ADVICE,

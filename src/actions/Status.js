@@ -4,8 +4,13 @@ import {getStatus} from '../api/status';
 export const statusAction = {
     BEGIN_LOAD_STATUS: "BEGIN_LOAD_STATUS",
     LOAD_STATUS_DONE: "LOAD_STATUS_DONE",
-    LOAD_STATUS_ERROR: "LOAD_STATUS_ERROR"
+    LOAD_STATUS_ERROR: "LOAD_STATUS_ERROR",
+    EXPIRED_STATUS: "EXPIRED_STATUS"
 }
+
+export const expiredStatus = () => ({
+    type: statusAction.EXPIRED_STATUS
+})
 
 export const beginLoadStatus = () => ({
     type: statusAction.BEGIN_LOAD_STATUS

@@ -50,6 +50,10 @@ class Trigger extends Component {
         this.props.loadTrigger(nextPair.id, nextPair.asset_name, nextPair.currency_name);
       }
     }
+
+    if (!nextProps.overview.isLoaded && !nextProps.overview.isLoading) {
+      this.props.loadPortfolio();
+    }
   }
 
   renderTableSumary = () => {

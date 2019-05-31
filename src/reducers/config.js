@@ -12,6 +12,13 @@ const initialState = {
 }
 export default (state = initialState, action) => {
     switch (action.type) {
+        case configAction.EXPIRED_CONFIG: {
+            return {
+                ...state,
+                isLoading: false,
+                isLoaded: false
+            }
+        }
         case configAction.CHANGE_PAIR_CONFIG: {
             return {
                 ...state,

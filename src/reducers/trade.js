@@ -19,6 +19,18 @@ const initialState = {
 export default (state = initialState, action) => {
     let assetCurrencyId = genarateAssetCurrencyId(action.asset_name, action.currency_name, action.id);
     switch (action.type) {
+        case tradeAction.EXPIRED_TRADE: {
+            let newState = {
+                ...state
+            };
+
+            newState[assetCurrencyId] = {
+                ...newState[assetCurrencyId],
+                isLoading: false,
+                isLoaded: false
+            };
+            return newState;
+        }
         case tradeAction.CHANGE_PAIR_TRADE: {
             return {
                 ...state,

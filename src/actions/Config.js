@@ -5,8 +5,13 @@ export const configAction = {
     BEGIN_LOAD_CONFIG: "BEGIN_LOAD_CONFIG",
     LOAD_CONFIG_DONE: "LOAD_CONFIG_DONE",
     LOAD_CONFIG_ERROR: "LOAD_CONFIG_ERROR",
-    CHANGE_PAIR_CONFIG: "CHANGE_PAIR_CONFIG"
+    CHANGE_PAIR_CONFIG: "CHANGE_PAIR_CONFIG",
+    EXPIRED_CONFIG: "EXPIRED_CONFIG"
 }
+
+export const expiredConfig = () => ({
+    type: configAction.EXPIRED_CONFIG
+})
 
 export const changePair = (id, asset_name, currency_name) => ({
     type: configAction.CHANGE_PAIR_CONFIG,

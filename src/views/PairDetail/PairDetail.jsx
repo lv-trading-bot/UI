@@ -15,10 +15,10 @@ class PairDetail extends Component {
   renderRequireChoose = () => <div className="animated fadeIn pt-1 text-center">Please Choose a Pair.</div>
 
   componentDidMount() {
-    if (!this.props.overview.isLoaded) {
+    if (!this.props.overview.isLoaded && !this.props.overview.isLoading) {
       this.props.loadPortfolio();
     }
-    if (!this.props.isLoaded) {
+    if (!this.props.isLoaded && !this.props.isLoading) {
       this.props.loadConfig();
     }
   }
@@ -53,6 +53,14 @@ class PairDetail extends Component {
       if (!nextProps.trade[assetCurrencyId] || (!nextProps.trade[assetCurrencyId].isLoaded && !nextProps.trade[assetCurrencyId].isLoading)) {
         this.props.loadTrade(nextPair.id, nextPair.asset_name, nextPair.currency_name);
       }
+    }
+
+    if (!nextProps.overview.isLoaded && !nextProps.overview.isLoading) {
+      this.props.loadPortfolio();
+    }
+
+    if (!nextProps.isLoaded && !nextProps.isLoading) {
+      this.props.loadConfig();
     }
   }
 

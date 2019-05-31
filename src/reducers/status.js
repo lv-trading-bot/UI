@@ -7,6 +7,13 @@ const initialState = {
 }
 export default (state = initialState, action) => {
     switch (action.type) {
+        case statusAction.EXPIRED_STATUS: {
+            return {
+                ...state,
+                isLoading: false,
+                isLoaded: false
+            }
+        }
         case statusAction.BEGIN_LOAD_STATUS:
             return {
                 ...state,

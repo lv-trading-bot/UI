@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Card, CardBody, CardHeader, Col, Row, Table, Badge } from 'reactstrap';
+import { Card, CardBody, CardHeader, Col, Row, Table } from 'reactstrap';
 import _ from 'lodash';
 import ReactJson from 'react-json-view';
 import { genarateAssetCurrencyId } from '../../utils';
@@ -75,7 +75,6 @@ class Advice extends Component {
           </thead>
           <tbody>
             {_.map(_.reverse(_.cloneDeep(props[assetCurrencyId].advices)), (advice, index) => {
-              console.log(advice);
               return (
                 <tr key={index}>
                   <td>{advice.at}</td>

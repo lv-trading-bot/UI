@@ -4,8 +4,16 @@ import {getPortfolio} from '../api/portfolio';
 export const overviewAction = {
     BEGIN_LOAD_PORTFOLIO: "BEGIN_LOAD_PORTFOLIO",
     LOAD_PORTFOLIO_DONE: "LOAD_PORTFOLIO_DONE",
-    LOAD_PORTFOLIO_ERROR: "LOAD_PORTFOLIO_ERROR"
+    LOAD_PORTFOLIO_ERROR: "LOAD_PORTFOLIO_ERROR",
+    EXPIRED_PORTFOLIO: "EXPIRED_PORTFOLIO"
 }
+
+export const expiredPortfolio = (id, asset_name, currency_name) => ({
+    type: overviewAction.EXPIRED_PORTFOLIO,
+    id,
+    asset_name,
+    currency_name
+})
 
 export const beginLoadPortfolio = () => ({
     type: overviewAction.BEGIN_LOAD_PORTFOLIO

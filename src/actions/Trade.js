@@ -5,8 +5,16 @@ export const tradeAction = {
     BEGIN_LOAD_TRADE: "BEGIN_LOAD_TRADE",
     LOAD_TRADE_DONE: "LOAD_TRADE_DONE",
     LOAD_TRADE_ERROR: "LOAD_TRADE_ERROR",
-    CHANGE_PAIR_TRADE: "CHANGE_PAIR_TRADE"
+    CHANGE_PAIR_TRADE: "CHANGE_PAIR_TRADE",
+    EXPIRED_TRADE: "EXPIRED_TRADE"
 }
+
+export const expiredTrade = (id, asset_name, currency_name) => ({
+    type: tradeAction.EXPIRED_TRADE,
+    id,
+    asset_name,
+    currency_name
+})
 
 export const changePair = (id, asset_name, currency_name) => ({
     type: tradeAction.CHANGE_PAIR_TRADE,
