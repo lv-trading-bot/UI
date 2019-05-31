@@ -71,6 +71,12 @@ class PairDetail extends Component {
       let assetCurrencyId = genarateAssetCurrencyId(curPair.asset_name, curPair.currency_name, curPair.id);
       let curListTrigger = _.get(props, `trigger.${assetCurrencyId}.triggers`, []);
       let curListTrade = _.get(props, `trade.${assetCurrencyId}.trades`, []);
+
+      let tong_tien_trade_ban = _.filter(curListTrade, c => c.action.toLowerCase() === 'sell').reduce((res, v) => res + (v.amount * v.effectivePrice), 0);
+      let tong_asset_dang_giu = _.filter(curListTrigger, c => !c.what).reduce((res, v) => res + v.properties.assetAmount, 0);
+      let tong_tien_trade_mua = _.filter(curListTrade, c => c.action.toLowerCase() === 'buy').reduce((res, v) => res + v.amount, 0);
+      let estimatedProfit = tong_tien_trade_ban + (tong_asset_dang_giu * curPortfolio.price) - tong_tien_trade_mua;
+
       let infos = [];
       if (curPortfolio) {
         infos = [
@@ -111,15 +117,12 @@ class PairDetail extends Component {
           },
           { 
             name: "Estimated profit", 
-            value: ((_.filter(curListTrade, c => c.action.toLowerCase() === 'sell').reduce((res, v) => res + v.amountWithFee, 0))
-                  + (_.filter(curListTrigger, c => !c.what).reduce((res, v) => res + v.properties.assetAmount, 0) * curPortfolio.price)
-                  - (_.filter(curListTrade, c => c.action.toLowerCase() === 'buy').reduce((res, v) => res + (v.amountWithFee * v.price), 0))).toFixed(5)
-                  + ` ${curPair.currency_name}`, 
+            value: estimatedProfit + ` ${curPair.currency_name}`, 
             description: "((tổng số tiền trade bán + số asset đang giữ của con đó * price) - tổng số tiền trade mua === số tiền lời)" 
           },
           { 
             name: "Current price", 
-            value: curPortfolio.price, 
+            value: `${curPortfolio.price} (${curPortfolio.last_update ? moment(curPortfolio.last_update).fromNow() : "unknown"})`, 
             description: "" 
           },
           { 

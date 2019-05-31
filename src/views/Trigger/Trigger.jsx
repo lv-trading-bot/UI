@@ -3,6 +3,7 @@ import { Card, CardBody, CardHeader, Col, Row, Table, Badge } from 'reactstrap';
 import _ from 'lodash';
 import { genarateAssetCurrencyId } from '../../utils';
 import Filter from '../../components/Filter';
+import moment from 'moment';
 
 class Trigger extends Component {
 
@@ -53,6 +54,7 @@ class Trigger extends Component {
 
   renderTableSumary = () => {
     let curPair = this.props.pair, props = this.props;
+    let curPortfolio = _.find(props.overview.portfolios, portfolio => portfolio.id === curPair.id);
 
     if (curPair.asset_name && curPair.currency_name && curPair.id) {
       let assetCurrencyId = genarateAssetCurrencyId(curPair.asset_name, curPair.currency_name, curPair.id);
@@ -67,6 +69,10 @@ class Trigger extends Component {
       let listTrigger = _.get(props[assetCurrencyId], "triggers", []);
 
       let infos = [
+        {
+          name: "Current Price",
+          value: `${curPortfolio.price} (${curPortfolio.last_update ? moment(curPortfolio.last_update).fromNow() : "unknown"})`
+        },
         {
           name: "Running Trigger",
           value: _.filter(listTrigger, trigger => !trigger.what).length
