@@ -26,6 +26,7 @@ const Dashboard = React.lazy(() => import('./views/Dashboard'));
 const Overview = React.lazy(() => import('./containers/Overview'));
 const Status = React.lazy(() => import('./containers/Status'));
 const Trade = React.lazy(() => import('./containers/Trade'));
+const Advice = React.lazy(() => import('./containers/Advice'));
 const PairDetail = React.lazy(() => import('./containers/PairDetail'));
 const Trigger = React.lazy(() => import('./containers/Trigger'));
 const CoreUIIcons = React.lazy(() => import('./views/Icons/CoreUIIcons'));
@@ -49,6 +50,7 @@ const routes = [
   { path: '/status', name: 'Status', component: Status },
   { path: '/pair-detail', name: "Pair Detail", component: PairDetail},
   { path: '/trade', name: "Trade", component: Trade},
+  { path: '/advice', name: "Advice", component: Advice},
   { path: '/trigger', name: "Trigger", component: Trigger},
   // { path: '/theme', exact: true, name: 'Theme', component: Colors },
   // { path: '/theme/colors', name: 'Colors', component: Colors },

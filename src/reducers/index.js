@@ -4,5 +4,6 @@ import config from './config';
 import status from './status';
 import trigger from './trigger';
 import trade from './trade';
+import advice from './advice';
 
-export default combineReducers({overview, config, status, trigger, trade});
+export default combineReducers({overview, config, status, trigger, trade, advice});

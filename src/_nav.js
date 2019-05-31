@@ -34,6 +34,11 @@ export default {
       url: '/trade',
       icon: 'icon-list',
     },
+    {
+      name: 'Advice',
+      url: '/advice',
+      icon: 'icon-list',
+    },
     // {
     //   title: true,
     //   name: 'Theme',

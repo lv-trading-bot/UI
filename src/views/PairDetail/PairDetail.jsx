@@ -218,7 +218,7 @@ class PairDetail extends Component {
                 <strong><i className="icon-info pr-1"></i>Config</strong>
               </CardHeader>
               <CardBody>
-                <ReactJson src={curConfig} name={false} theme={"flat"} iconStyle="circle" displayDataTypes={false} />
+                <ReactJson src={curConfig} name={false} theme={"flat"} iconStyle="circle" displayDataTypes={false} collapsed={1}/>
               </CardBody>
             </Card>
           </Col>
