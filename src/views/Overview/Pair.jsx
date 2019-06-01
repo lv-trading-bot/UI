@@ -39,7 +39,7 @@ class Pair extends Component {
 
     render() {
         return (
-            <tr>
+            <tr onClick={this.props.onClick} style={{cursor: "pointer"}}>
                 <td>{this.props.id}</td>
                 <td>{`${this.props.asset_name}_${this.props.currency_name}`}</td>
                 <td>{`${this.props.asset.toLocaleString()} ${this.props.asset_name}`}</td>
@@ -61,7 +61,8 @@ Pair.propTypes = {
     currency_name: Proptypes.string.isRequired,
     price: Proptypes.number.isRequired,
     last_update: Proptypes.string,
-    props_status: Proptypes.object
+    props_status: Proptypes.object,
+    onClick: Proptypes.func.isRequired
 }
 
 export default Pair;

@@ -48,7 +48,7 @@ const routes = [
   { path: '/dashboard', name: 'Dashboard', component: Dashboard },
   { path: '/overview', name: 'Overview', component: Overview },
   { path: '/status', name: 'Status', component: Status },
-  { path: '/pair-detail', name: "Pair Detail", component: PairDetail},
+  { path: '/pair-detail/:asset_name/:currency_name/:id', name: "Pair Detail", component: PairDetail},
   { path: '/trade', name: "Trade", component: Trade},
   { path: '/advice', name: "Advice", component: Advice},
   { path: '/trigger', name: "Trigger", component: Trigger},

@@ -1,13 +1,14 @@
 import PairDetail from '../../views/PairDetail/PairDetail';
 import {connect} from 'react-redux';
 import {loadPortfolio} from '../../actions/Overview';
-import {changePair, loadConfig} from '../../actions/Config';
+import {loadConfig} from '../../actions/Config';
 import {loadTrigger} from '../../actions/Trigger';
 import {loadTrade} from '../../actions/Trade';
 
 const mapStateToProps = (state, ownProps) => {
     return {
         ...state.config,
+        pair: {...ownProps.match.params},
         overview: state.overview,
         trigger: state.trigger,
         trade: state.trade
@@ -22,7 +23,6 @@ const mapDispatchToProps = dispatch => {
         dispatch(loadTrigger(id, asset_name, currency_name, condition, sort, limit, page)),
       loadTrade: (id, asset_name, currency_name, condition, sort, limit, page) => 
         dispatch(loadTrade(id, asset_name, currency_name, condition, sort, limit, page)),
-      changePair: (id, asset_name, currency_name) => dispatch(changePair(id, asset_name, currency_name)),
     }
   }
 

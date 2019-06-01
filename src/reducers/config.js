@@ -1,10 +1,10 @@
 import {configAction} from "../actions/Config";
 const initialState = {
-    pair: {
-        id: null,
-        asset_name: null,
-        currency_name: null
-    },
+    // pair: {
+    //     id: null,
+    //     asset_name: null,
+    //     currency_name: null
+    // },
     configs: [],
     isLoading: false,
     isError: false,
@@ -19,16 +19,16 @@ export default (state = initialState, action) => {
                 isLoaded: false
             }
         }
-        case configAction.CHANGE_PAIR_CONFIG: {
-            return {
-                ...state,
-                pair: {
-                    id: action.id,
-                    asset_name: action.asset_name,
-                    currency_name: action.currency_name
-                }
-            }
-        }
+        // case configAction.CHANGE_PAIR_CONFIG: {
+        //     return {
+        //         ...state,
+        //         pair: {
+        //             id: action.id,
+        //             asset_name: action.asset_name,
+        //             currency_name: action.currency_name
+        //         }
+        //     }
+        // }
         case configAction.BEGIN_LOAD_CONFIG:
             return {
                 ...state,

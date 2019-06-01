@@ -4,7 +4,6 @@ import ReactJson from 'react-json-view';
 import _ from 'lodash';
 import moment from 'moment';
 import { genarateAssetCurrencyId } from '../../utils';
-import Filter from '../../components/Filter';
 
 class PairDetail extends Component {
 
@@ -24,20 +23,7 @@ class PairDetail extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    let curPair = this.props.pair,
-      nextPair = nextProps.pair;
-    if (nextPair.id === null
-      && nextPair.asset_name === null
-      && nextPair.currency_name === null
-      && curPair.id === null
-      && curPair.asset_name === null
-      && curPair.currency_name === null
-      && nextProps.overview.isLoaded
-      && nextProps.overview.portfolios.length > 0) {
-      this.props.changePair(nextProps.overview.portfolios[0].id,
-        nextProps.overview.portfolios[0].asset_name,
-        nextProps.overview.portfolios[0].currency_name)
-    }
+    let nextPair = nextProps.pair;
 
     let assetCurrencyId = genarateAssetCurrencyId(nextPair.asset_name, nextPair.currency_name, nextPair.id);
 
@@ -202,18 +188,25 @@ class PairDetail extends Component {
   render() {
     let curPair = this.props.pair;
     let curConfig = _.find(this.props.configs, config => config.id === curPair.id);
+    let curPortfolio = _.find(this.props.overview.portfolios, portfolio => portfolio.id === curPair.id);
+
+    if(!curPortfolio) {
+      return (
+        <strong><i className="icon-info pr-1"></i>{
+          `Pair (Asset: ${this.props.pair.asset_name}, Currency: ${this.props.pair.currency_name}, id: ${this.props.pair.id}) Not found`
+        }</strong>
+      )
+    }
+
     return (
       <div className="animated fadeIn">
         <Row>
           <Col sm={12}>
             <Card>
               <CardHeader>
-                <Filter
-                  overview={this.props.overview}
-                  pair={this.props.pair}
-                  changePair={this.props.changePair}
-                  name={"Trade"}
-                />
+                <strong><i className="icon-info pr-1"></i>{
+                  `Asset: ${this.props.pair.asset_name}, Currency: ${this.props.pair.currency_name}, id: ${this.props.pair.id}`
+                }</strong>
               </CardHeader>
               <CardBody>
                 {this.renderContentPairDetail()}

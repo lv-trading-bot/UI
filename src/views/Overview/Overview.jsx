@@ -88,6 +88,7 @@ class Overview extends Component {
                       price={pair.price}
                       last_update={pair.last_update}
                       props_status={this.props.status}
+                      onClick={() => this.props.switchToPairDetail(pair.asset_name, pair.currency_name, pair.id)}
                     />))}
                   </tbody>
                 </Table>

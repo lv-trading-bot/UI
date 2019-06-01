@@ -10,10 +10,13 @@ const mapStateToProps = (state, ownProps) => {
     }
 }
 
-const mapDispatchToProps = dispatch => {
+const mapDispatchToProps = (dispatch, ownProps) => {
     return {
       loadPortfolio: (condition, sort, limit, page) => dispatch(loadPortfolio(condition, sort, limit, page)),
-      loadStatus: (condition, sort, limit, page) => dispatch(loadStatus(condition, sort, limit, page))
+      loadStatus: (condition, sort, limit, page) => dispatch(loadStatus(condition, sort, limit, page)),
+      switchToPairDetail: (asset_name, currency_name, id) => {
+        ownProps.history.push(`/pair-detail/${asset_name}/${currency_name}/${id}`);
+      }
     }
   }
 
