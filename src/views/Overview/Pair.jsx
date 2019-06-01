@@ -5,17 +5,6 @@ import Proptypes from 'prop-types';
 import _ from 'lodash';
 
 class Pair extends Component {
-    /**
-     {
-        "_id" : ObjectId("5ce29e03648f80fd5b64e647"),
-        "asset" : 0.23932654,
-        "currency" : 3123.68866898,
-        "price" : 7907.25,
-        "id" : "1558355458822673",
-        "asset_name" : "BTC",
-        "currency_name" : "USDT"
-    }
-     */
 
     renderLoading = () => <div className="animated fadeIn pt-1 text-center">Loading...</div>
 
@@ -37,17 +26,47 @@ class Pair extends Component {
             : (<Badge color="danger">{status.status}</Badge>)
     }
 
+    renderPairControl = (id, asset_name, currency_name) => {
+        if (this.props.props_pair_control.isLoading) {
+            return (<td>{this.renderLoading()}</td>)
+        }
+
+        if (this.props.props_pair_control.isError) {
+            return (<td>{this.renderError(this.props.props_pair_control.errorMessage)}</td>)
+        }
+
+        let listPairControl = this.props.props_pair_control.pairControls;
+        let pairControl = _.find(listPairControl, pair => pair.id === id) || {accept_buy: true, set_by: "unknown"};
+
+        let listRes = [];
+        listRes.push(<td 
+            style={{cursor: "pointer"}}
+            key={"accep_buy"}
+            onClick={() => this.props.putPairControl(id, asset_name, currency_name, !pairControl.accept_buy, 'User')}
+            >
+                {(pairControl.accept_buy) ?
+                (<Badge color="success">true</Badge>)
+                : (<Badge color="danger">false</Badge>)}
+            </td>)
+
+        listRes.push(<td key={"set_by"}>{pairControl.set_by}</td>);
+        listRes.push(<td key={"last_update"}>{pairControl.last_update}</td>);
+        
+        return listRes;
+    }
+
     render() {
         return (
-            <tr onClick={this.props.onClick} style={{cursor: "pointer"}}>
-                <td>{this.props.id}</td>
-                <td>{`${this.props.asset_name}_${this.props.currency_name}`}</td>
-                <td>{`${this.props.asset.toLocaleString()} ${this.props.asset_name}`}</td>
-                <td>{`${this.props.currency.toLocaleString()} ${this.props.currency_name}`}</td>
-                <td>{this.props.price.toLocaleString()}</td>
-                <td>{`${(this.props.currency + this.props.asset * this.props.price).toLocaleString()} ${this.props.currency_name}`}</td>
-                <td>{this.props.last_update}</td>
-                <td>{this.renderStatus(this.props.id)}</td>
+            <tr>
+                <td onClick={this.props.onClick} style={{cursor: "pointer"}}>{this.props.id}</td>
+                <td onClick={this.props.onClick} style={{cursor: "pointer"}}>{`${this.props.asset_name}_${this.props.currency_name}`}</td>
+                <td onClick={this.props.onClick} style={{cursor: "pointer"}}>{`${this.props.asset.toLocaleString()} ${this.props.asset_name}`}</td>
+                <td onClick={this.props.onClick} style={{cursor: "pointer"}}>{`${this.props.currency.toLocaleString()} ${this.props.currency_name}`}</td>
+                <td onClick={this.props.onClick} style={{cursor: "pointer"}}>{this.props.price.toLocaleString()}</td>
+                <td onClick={this.props.onClick} style={{cursor: "pointer"}}>{`${(this.props.currency + this.props.asset * this.props.price).toLocaleString()} ${this.props.currency_name}`}</td>
+                <td onClick={this.props.onClick} style={{cursor: "pointer"}}>{this.props.last_update}</td>
+                <td onClick={this.props.onClick} style={{cursor: "pointer"}}>{this.renderStatus(this.props.id)}</td>
+                {this.renderPairControl(this.props.id, this.props.asset_name, this.props.currency_name)}
             </tr>
         )
     }
@@ -62,7 +81,9 @@ Pair.propTypes = {
     price: Proptypes.number.isRequired,
     last_update: Proptypes.string,
     props_status: Proptypes.object,
-    onClick: Proptypes.func.isRequired
+    props_pair_control: Proptypes.object,
+    onClick: Proptypes.func.isRequired,
+    putPairControl: Proptypes.func.isRequired
 }
 
 export default Pair;

@@ -3,26 +3,6 @@ import { Card, CardBody, CardHeader, Col, Row, Table } from 'reactstrap';
 import Pair from './Pair';
 import _ from 'lodash';
 
-// const props = [{
-//   id:"23423",
-//   asset:12,
-//   currency:5000,
-//   asset_name:"BTC",
-//   currency_name:"USDT",
-//   price:7000,
-//   last_update:"2019-05-12 12:00:00",
-//   status:"Running"
-// },{
-//   id:"23423",
-//   asset:100,
-//   currency:5000,
-//   asset_name:"ETH",
-//   currency_name:"USDT",
-//   price:201,
-//   last_update:"2019-05-12 12:00:00",
-//   status:"Running"
-// }]
-
 class Overview extends Component {
 
   renderLoading = () => <div className="animated fadeIn pt-1 text-center">Loading...</div>
@@ -36,6 +16,9 @@ class Overview extends Component {
     if(!this.props.status.isLoaded && !this.props.status.isLoading) {
       this.props.loadStatus();
     }
+    if(!this.props.pairControl.isLoaded && !this.props.pairControl.isLoading) {
+      this.props.loadPairControl();
+    }
   }
 
   componentWillReceiveProps(nextProps) {
@@ -44,6 +27,9 @@ class Overview extends Component {
     }
     if(!nextProps.status.isLoaded && !nextProps.status.isLoading) {
       this.props.loadStatus();
+    }
+    if(!nextProps.pairControl.isLoaded && !nextProps.pairControl.isLoading) {
+      this.props.loadPairControl();
     }
   }
 
@@ -75,6 +61,9 @@ class Overview extends Component {
                       <th>Estimated Balance</th>
                       <th>Last update</th>
                       <th>Status</th>
+                      <th>Accept Buy</th>
+                      <th>Set By</th>
+                      <th>Last Change</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -89,6 +78,8 @@ class Overview extends Component {
                       last_update={pair.last_update}
                       props_status={this.props.status}
                       onClick={() => this.props.switchToPairDetail(pair.asset_name, pair.currency_name, pair.id)}
+                      props_pair_control={this.props.pairControl}
+                      putPairControl={this.props.putPairControl}
                     />))}
                   </tbody>
                 </Table>
