@@ -68,7 +68,7 @@ class PairDetail extends Component {
 
       let tong_tien_trade_ban = _.filter(curListTrade, c => c.action.toLowerCase() === 'sell').reduce((res, v) => res + (v.amount * v.effectivePrice), 0);
       let tong_asset_dang_giu = _.filter(curListTrigger, c => !c.what).reduce((res, v) => res + v.properties.assetAmount, 0);
-      let tong_tien_trade_mua = _.filter(curListTrade, c => c.action.toLowerCase() === 'buy').reduce((res, v) => res + v.amount, 0);
+      let tong_tien_trade_mua = _.filter(curListTrade, c => c.action.toLowerCase() === 'buy').reduce((res, v) => res + v.amount * v.effectivePrice, 0);
       let estimatedProfit = tong_tien_trade_ban + (tong_asset_dang_giu * curPortfolio.price) - tong_tien_trade_mua;
 
       let infos = [];

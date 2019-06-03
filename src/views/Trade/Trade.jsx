@@ -79,17 +79,18 @@ class Trade extends Component {
           </thead>
           <tbody>
             {_.map(_.reverse(_.cloneDeep(props[assetCurrencyId].trades)), (trade, index) => {
+              let isBuy = trade.action.toLowerCase() === 'buy';
               return (
                 <tr key={index}>
                   <td>{trade.id}</td>
                   <td>{trade.adviceId}</td>
                   <td>{trade.price}</td>
-                  <td>{`${trade.amount} ${(trade.action.toLowerCase() === 'buy' ? curPair.currency_name : curPair.asset_name)}`}</td>
-                  <td>{`${trade.amountWithFee} ${(trade.action.toLowerCase() === 'buy' ? curPair.asset_name : curPair.currency_name)}`}</td>
+                  <td>{`${trade.amount * (isBuy ? trade.price : 1)} ${(isBuy ? curPair.currency_name : curPair.asset_name)}`}</td>
+                  <td>{`${trade.amountWithFee * (isBuy ? 1 : trade.price)} ${(isBuy ? curPair.asset_name : curPair.currency_name)}`}</td>
                   <td>{trade.date}</td>
                   <td>{trade.cost.toFixed(5)}</td>
                   <td>
-                    {(trade.action.toLowerCase() === 'buy' ? 
+                    {(isBuy ? 
                     (<Badge color="success">Buy</Badge>) 
                     : (<Badge color="danger">Sell</Badge>))}
                   </td>
