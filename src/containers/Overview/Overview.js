@@ -3,12 +3,14 @@ import {connect} from 'react-redux';
 import {loadPortfolio} from '../../actions/Overview';
 import {loadStatus} from '../../actions/Status';
 import {loadPairControl, putPairControl} from '../../actions/PairControl';
+import {startGekko, stopGekko} from '../../actions/Gekko';
 
 const mapStateToProps = (state, ownProps) => {
     return {
         ...state.overview,
         status: state.status,
-        pairControl: state.pairControl
+        pairControl: state.pairControl,
+        gekko: state.gekko
     }
 }
 
@@ -20,7 +22,9 @@ const mapDispatchToProps = (dispatch, ownProps) => {
       putPairControl: (id, asset, currency, accept_buy, set_by) => dispatch(putPairControl(id, asset, currency, accept_buy, set_by)),
       switchToPairDetail: (asset_name, currency_name, id) => {
         ownProps.history.push(`/pair-detail/${asset_name}/${currency_name}/${id}`);
-      }
+      },
+      startGekko: (containerName) => dispatch(startGekko(containerName)),
+      stopGekko: (containerName) => dispatch(stopGekko(containerName))
     }
   }
 

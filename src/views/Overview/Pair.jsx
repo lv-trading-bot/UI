@@ -51,7 +51,33 @@ class Pair extends Component {
 
         listRes.push(<td key={"set_by"}>{pairControl.set_by}</td>);
         listRes.push(<td key={"last_update"}>{pairControl.last_update}</td>);
+
+        let listStatus = this.props.props_status.statuss;
+        let status = _.find(listStatus, stt => stt.id === id) || {status: "unknown"};
+
+        let actionEl = null;
+        if(!this.props.gekko.isLoading) {
+            actionEl = (
+                <td key={"action"}>
+                    {status.containerName 
+                    ? (status.status.toLowerCase() === "connected") 
+                        ? (<Badge 
+                            color="danger" 
+                            style={{cursor: "pointer"}}
+                            onClick={() => this.props.stopGekko(status.containerName)}
+                            >{"Stop"}</Badge>)
+                        : (<Badge 
+                            color="success" 
+                            style={{cursor: "pointer"}}
+                            onClick={() => this.props.startGekko(status.containerName)}
+                            >{"Start"}</Badge>)
+                    : (<p className="text-danger">{"No control"}</p>)}
+                </td>)
+        } else {
+            actionEl = <p>Loading...</p>
+        }
         
+        listRes.push(actionEl);
         return listRes;
     }
 
@@ -83,7 +109,10 @@ Pair.propTypes = {
     props_status: Proptypes.object,
     props_pair_control: Proptypes.object,
     onClick: Proptypes.func.isRequired,
-    putPairControl: Proptypes.func.isRequired
+    putPairControl: Proptypes.func.isRequired,
+    startGekko: Proptypes.func.isRequired,
+    stopGekko: Proptypes.func.isRequired,
+    gekko: Proptypes.object
 }
 
 export default Pair;

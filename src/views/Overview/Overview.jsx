@@ -64,6 +64,7 @@ class Overview extends Component {
                       <th>Accept Buy</th>
                       <th>Set By</th>
                       <th>Last Change</th>
+                      <th>Action</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -80,6 +81,9 @@ class Overview extends Component {
                       onClick={() => this.props.switchToPairDetail(pair.asset_name, pair.currency_name, pair.id)}
                       props_pair_control={this.props.pairControl}
                       putPairControl={this.props.putPairControl}
+                      startGekko={this.props.startGekko}
+                      stopGekko={this.props.stopGekko}
+                      gekko={this.props.gekko}
                     />))}
                   </tbody>
                 </Table>

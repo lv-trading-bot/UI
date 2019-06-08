@@ -28,6 +28,7 @@ const Status = React.lazy(() => import('./containers/Status'));
 const Trade = React.lazy(() => import('./containers/Trade'));
 const Advice = React.lazy(() => import('./containers/Advice'));
 const PairDetail = React.lazy(() => import('./containers/PairDetail'));
+const RunGekko = React.lazy(() => import('./containers/RunGekko'));
 const Trigger = React.lazy(() => import('./containers/Trigger'));
 const CoreUIIcons = React.lazy(() => import('./views/Icons/CoreUIIcons'));
 // const Flags = React.lazy(() => import('./views/Icons/Flags'));
@@ -52,6 +53,7 @@ const routes = [
   { path: '/trade', name: "Trade", component: Trade},
   { path: '/advice', name: "Advice", component: Advice},
   { path: '/trigger', name: "Trigger", component: Trigger},
+  { path: '/run-gekko', name: "Run Gekko", component: RunGekko},
   // { path: '/theme', exact: true, name: 'Theme', component: Colors },
   // { path: '/theme/colors', name: 'Colors', component: Colors },
   // { path: '/theme/typography', name: 'Typography', component: Typography },

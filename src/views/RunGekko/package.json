@@ -1,0 +1,6 @@
+{
+  "name": "RunGekko",
+  "version": "0.0.0",
+  "private": true,
+  "main": "./RunGekko.jsx"
+}

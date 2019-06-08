@@ -86,7 +86,7 @@ class Trigger extends Component {
           value: _.filter(listTrigger, trigger => trigger.what && trigger.what.toLowerCase() === 'takeprofit').length
         },
         {
-          name: "Make-loss Trigger",
+          name: "Loss-making Trigger",
           value: _.filter(listTrigger, trigger => trigger.what && trigger.what.toLowerCase() === 'stoploss').length
         },
         {

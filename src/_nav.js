@@ -15,6 +15,11 @@ export default {
       icon: 'icon-speedometer',
     },
     {
+      name: 'Run Gekko',
+      url: '/run-gekko',
+      icon: 'icon-speedometer',
+    },
+    {
       name: 'Status',
       url: '/status',
       icon: 'icon-speedometer',

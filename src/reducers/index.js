@@ -5,6 +5,7 @@ import status from './status';
 import trigger from './trigger';
 import trade from './trade';
 import advice from './advice';
-import pairControl from './pairControl'
+import pairControl from './pairControl';
+import gekko from './gekko';
 
-export default combineReducers({overview, config, status, trigger, trade, advice, pairControl});
+export default combineReducers({overview, config, status, trigger, trade, advice, pairControl, gekko});
