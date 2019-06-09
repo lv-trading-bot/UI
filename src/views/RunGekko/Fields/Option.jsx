@@ -16,6 +16,7 @@ export default class Number extends Component {
         value: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
         onChange: PropTypes.func.isRequired,
         isError: PropTypes.bool,
+        isSubmitting: PropTypes.bool,
         errorMessage: PropTypes.string
     }
 
@@ -30,6 +31,7 @@ export default class Number extends Component {
     }
 
     render() {
+        let isTouchOrSudmit = this.state.isTouch || this.props.isSubmitting;
         return (
             <FormGroup row>
                 <Col md="3">
@@ -56,7 +58,7 @@ export default class Number extends Component {
                         ))}
                     </Input>
                     <FormText color="muted">{this.props.description}</FormText>
-                    {this.state.isTouch && this.props.isError && <FormText color="danger">{this.props.errorMessage || "This field is require"}</FormText>}
+                    {isTouchOrSudmit && this.props.isError && <FormText color="danger">{this.props.errorMessage || "This field is require"}</FormText>}
                 </Col>
             </FormGroup>
         )

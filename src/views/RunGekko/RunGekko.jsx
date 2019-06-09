@@ -73,8 +73,8 @@ const paramsTypeOfPostRunGekko = {
 
     // paper
     asset: (val, body, key) => (
-        body.mode === 'live' 
-        || !_.isNaN(parseFloat(val)) ? undefined : `${key} is not valid`
+        body.mode === 'live'
+            || !_.isNaN(parseFloat(val)) ? undefined : `${key} is not valid`
     ),
     currency: (val, body, key) => (
         body.mode === 'live' || !_.isNaN(parseFloat(val)) ? undefined : `${key} is not valid`
@@ -91,7 +91,8 @@ export default class RunGekko extends Component {
         this.state = {
             formData: {
                 label: "omlbct"
-            }
+            },
+            isSubmitting: false
         };
     }
 
@@ -100,14 +101,16 @@ export default class RunGekko extends Component {
     renderError = (error) => <div className="animated fadeIn pt-1 text-center text-danger">{error}</div>
 
     runGekko = () => {
-        let config = this.transformToDataPost(this.state.formData);
-        let {isValid} = this.checkValidForm(config);
-        if(isValid) {
-            this.props.runGekko(config);
+        this.setState({ isSubmitting: true }, () => {
+            let config = this.transformToDataPost(this.state.formData);
+            let { isValid } = this.checkValidForm(config);
+            if (isValid) {
+                this.props.runGekko(config);
 
-            this.setState({formData: {label: "omlbct"}});
-            this.props.history.push('/overview');
-        }
+                this.setState({ formData: { label: "omlbct" } });
+                this.props.history.push('/overview');
+            }
+        })
     }
 
     /**
@@ -166,12 +169,13 @@ export default class RunGekko extends Component {
     transformToDataPost = (formData) => {
 
         let arrFeatures = ["start", {
-            name: "omlbct", 
+            name: "omlbct",
             params: {
                 "takeProfit": formData.takeProfit !== "" ? parseFloat(formData.takeProfit) : "",
                 "stopLoss": formData.stopLoss !== "" ? parseFloat(formData.stopLoss) : "",
                 "expirationPeriod": formData.expirationPeriod !== "" ? parseFloat(formData.expirationPeriod) : ""
-            }}
+            }
+        }
         ];
         try {
             arrFeatures = _.concat(arrFeatures, JSON.parse(this.state.formData.features));
@@ -240,7 +244,7 @@ export default class RunGekko extends Component {
         // }
 
 
-        let {errorMessage} = this.checkValidForm(this.transformToDataPost(this.state.formData));
+        let { errorMessage } = this.checkValidForm(this.transformToDataPost(this.state.formData));
 
         return (
             <Row>
@@ -260,6 +264,7 @@ export default class RunGekko extends Component {
                                 value={this.state.formData.asset_name}
                                 onChange={this.onChangeDataOfFields}
                                 isError={!_.isEmpty(errorMessage["asset_name"])}
+                                isSubmitting={this.state.isSubmitting}
                                 errorMessage={errorMessage["asset_name"]}
                             />
                             <Text
@@ -271,6 +276,7 @@ export default class RunGekko extends Component {
                                 value={this.state.formData.currency_name}
                                 onChange={this.onChangeDataOfFields}
                                 isError={!_.isEmpty(errorMessage["currency_name"])}
+                                isSubmitting={this.state.isSubmitting}
                                 errorMessage={errorMessage["currency_name"]}
                             />
                             <Number
@@ -282,6 +288,7 @@ export default class RunGekko extends Component {
                                 value={this.state.formData.candleSize}
                                 onChange={this.onChangeDataOfFields}
                                 isError={!_.isEmpty(errorMessage["candleSize"])}
+                                isSubmitting={this.state.isSubmitting}
                                 errorMessage={errorMessage["candleSize"]}
                             />
                             <Number
@@ -293,6 +300,7 @@ export default class RunGekko extends Component {
                                 value={this.state.formData.stopLoss}
                                 onChange={this.onChangeDataOfFields}
                                 isError={!_.isEmpty(errorMessage["stopLoss"])}
+                                isSubmitting={this.state.isSubmitting}
                                 errorMessage={errorMessage["stopLoss"]}
                             />
                             <Number
@@ -304,6 +312,7 @@ export default class RunGekko extends Component {
                                 value={this.state.formData.takeProfit}
                                 onChange={this.onChangeDataOfFields}
                                 isError={!_.isEmpty(errorMessage["takeProfit"])}
+                                isSubmitting={this.state.isSubmitting}
                                 errorMessage={errorMessage["takeProfit"]}
                             />
                             <Number
@@ -315,6 +324,7 @@ export default class RunGekko extends Component {
                                 value={this.state.formData.amountForOneTrade}
                                 onChange={this.onChangeDataOfFields}
                                 isError={!_.isEmpty(errorMessage["amountForOneTrade"])}
+                                isSubmitting={this.state.isSubmitting}
                                 errorMessage={errorMessage["amountForOneTrade"]}
                             />
                             <Number
@@ -326,6 +336,7 @@ export default class RunGekko extends Component {
                                 value={this.state.formData.expirationPeriod}
                                 onChange={this.onChangeDataOfFields}
                                 isError={!_.isEmpty(errorMessage["expirationPeriod"])}
+                                isSubmitting={this.state.isSubmitting}
                                 errorMessage={errorMessage["expirationPeriod"]}
                             />
                             <Number
@@ -337,6 +348,7 @@ export default class RunGekko extends Component {
                                 value={this.state.formData.decisionThreshold}
                                 onChange={this.onChangeDataOfFields}
                                 isError={!_.isEmpty(errorMessage["decisionThreshold"])}
+                                isSubmitting={this.state.isSubmitting}
                                 errorMessage={errorMessage["decisionThreshold"]}
                             />
                             <Number
@@ -348,6 +360,7 @@ export default class RunGekko extends Component {
                                 value={this.state.formData.stopTradeLimit}
                                 onChange={this.onChangeDataOfFields}
                                 isError={!_.isEmpty(errorMessage["stopTradeLimit"])}
+                                isSubmitting={this.state.isSubmitting}
                                 errorMessage={errorMessage["stopTradeLimit"]}
                             />
                             <Option
@@ -359,6 +372,7 @@ export default class RunGekko extends Component {
                                 value={this.state.formData.model_name}
                                 onChange={this.onChangeDataOfFields}
                                 isError={!_.isEmpty(errorMessage["model_name"])}
+                                isSubmitting={this.state.isSubmitting}
                                 errorMessage={errorMessage["model_name"]}
                             />
                             <Option
@@ -370,6 +384,7 @@ export default class RunGekko extends Component {
                                 value={this.state.formData.model_type}
                                 onChange={this.onChangeDataOfFields}
                                 isError={!_.isEmpty(errorMessage["model_type"])}
+                                isSubmitting={this.state.isSubmitting}
                                 errorMessage={errorMessage["model_type"]}
                             />
                             <Number
@@ -381,6 +396,7 @@ export default class RunGekko extends Component {
                                 value={this.state.formData.lag}
                                 onChange={this.onChangeDataOfFields}
                                 isError={!_.isEmpty(errorMessage["lag"])}
+                                isSubmitting={this.state.isSubmitting}
                                 errorMessage={errorMessage["lag"]}
                             />
                             <Json
@@ -392,6 +408,7 @@ export default class RunGekko extends Component {
                                 value={this.state.formData.features}
                                 onChange={this.onChangeDataOfFields}
                                 isError={!_.isEmpty(errorMessage["features"])}
+                                isSubmitting={this.state.isSubmitting}
                                 errorMessage={errorMessage["features"]}
                             />
                             {/* <Option
@@ -419,6 +436,7 @@ export default class RunGekko extends Component {
                                 value={this.state.formData.from}
                                 onChange={this.onChangeDataOfFields}
                                 isError={!_.isEmpty(errorMessage["train_daterange"])}
+                                isSubmitting={this.state.isSubmitting}
                                 errorMessage={errorMessage["train_daterange"]}
                             />
                             <DateTime
@@ -430,6 +448,7 @@ export default class RunGekko extends Component {
                                 value={this.state.formData.to}
                                 onChange={this.onChangeDataOfFields}
                                 isError={!_.isEmpty(errorMessage["train_daterange"])}
+                                isSubmitting={this.state.isSubmitting}
                                 errorMessage={errorMessage["train_daterange"]}
                             />
                             <Number
@@ -441,6 +460,7 @@ export default class RunGekko extends Component {
                                 value={this.state.formData.rolling_step}
                                 onChange={this.onChangeDataOfFields}
                                 isError={!_.isEmpty(errorMessage["rolling_step"])}
+                                isSubmitting={this.state.isSubmitting}
                                 errorMessage={errorMessage["rolling_step"]}
                             />
                             <Text
@@ -452,6 +472,7 @@ export default class RunGekko extends Component {
                                 value={this.state.formData.mailTag}
                                 onChange={this.onChangeDataOfFields}
                                 isError={!_.isEmpty(errorMessage["mailTag"])}
+                                isSubmitting={this.state.isSubmitting}
                                 errorMessage={errorMessage["mailTag"]}
                             />
                             <Option
@@ -466,6 +487,7 @@ export default class RunGekko extends Component {
                                 value={this.state.formData.mode}
                                 onChange={this.onChangeDataOfFields}
                                 isError={!_.isEmpty(errorMessage["mode"])}
+                                isSubmitting={this.state.isSubmitting}
                                 errorMessage={errorMessage["mode"]}
                             />
                             {this.state.formData.mode === 'paper' && <Number
@@ -477,6 +499,7 @@ export default class RunGekko extends Component {
                                 value={this.state.formData.asset}
                                 onChange={this.onChangeDataOfFields}
                                 isError={!_.isEmpty(errorMessage["asset"])}
+                                isSubmitting={this.state.isSubmitting}
                                 errorMessage={errorMessage["asset"]}
                             />}
                             {this.state.formData.mode === 'paper' && <Number
@@ -488,6 +511,7 @@ export default class RunGekko extends Component {
                                 value={this.state.formData.currency}
                                 onChange={this.onChangeDataOfFields}
                                 isError={!_.isEmpty(errorMessage["currency"])}
+                                isSubmitting={this.state.isSubmitting}
                                 errorMessage={errorMessage["currency"]}
                             />}
                             {this.state.formData.mode === 'live' && <Text
@@ -499,6 +523,7 @@ export default class RunGekko extends Component {
                                 value={this.state.formData.key}
                                 onChange={this.onChangeDataOfFields}
                                 isError={!_.isEmpty(errorMessage["key"])}
+                                isSubmitting={this.state.isSubmitting}
                                 errorMessage={errorMessage["key"]}
                             />}
                             {this.state.formData.mode === 'live' && <Text
@@ -510,6 +535,7 @@ export default class RunGekko extends Component {
                                 value={this.state.formData.secret}
                                 onChange={this.onChangeDataOfFields}
                                 isError={!_.isEmpty(errorMessage["secret"])}
+                                isSubmitting={this.state.isSubmitting}
                                 errorMessage={errorMessage["secret"]}
                             />}
                             {this.props.isError && this.renderError(this.props.errorMessage)}
