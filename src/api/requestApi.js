@@ -1,5 +1,8 @@
-import axios from 'axios'
-import * as _ from 'lodash'
+import axios from 'axios';
+import * as _ from 'lodash';
+
+const token = localStorage.getItem('token');
+axios.defaults.headers.common['Authorization'] = token;
 
 export const requestApi = (api = {url: "", method: "", headers: {}, params: {}}) => {
     let config = {
@@ -16,6 +19,12 @@ export const requestApi = (api = {url: "", method: "", headers: {}, params: {}})
             return resolve(res.data);
         })
         .catch(err => {
+            if(err.response && err.response.status === 403) {
+                let prevUrl = window.location.hash.replace("#", "");
+                if (prevUrl.indexOf('/login') < 0) {
+                    window.location.href = `/#/login?prevUrl=${prevUrl}`;
+                }
+            }
             return reject(err);
         })
     })

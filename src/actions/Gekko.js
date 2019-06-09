@@ -29,8 +29,10 @@ export const runGekko = (config) => {
             if(res.error) {
                 dispatch(gekkoError(res.error));
             } else {
-                dispatch(gekkoDone());
-                dispatch(expiredStatus());
+                setTimeout(() => {
+                    dispatch(gekkoDone());
+                    dispatch(expiredStatus());
+                }, 5000)
             }
         })
         .catch(err => {
@@ -47,8 +49,10 @@ export const startGekko = (containerName) => {
             if(res.error) {
                 dispatch(gekkoError(res.error));
             } else {
-                dispatch(gekkoDone());
-                dispatch(expiredStatus());
+                setTimeout(() => {
+                    dispatch(gekkoDone());
+                    dispatch(expiredStatus());
+                }, 5000)
             }
         })
         .catch(err => {
@@ -65,8 +69,10 @@ export const stopGekko = (containerName) => {
             if(res.error) {
                 dispatch(gekkoError(res.error));
             } else {
-                dispatch(gekkoDone());
-                dispatch(expiredStatus());
+                setTimeout(() => {
+                    dispatch(gekkoDone());
+                    dispatch(expiredStatus());
+                }, 5000)
             }
         })
         .catch(err => {
