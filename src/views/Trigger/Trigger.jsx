@@ -208,7 +208,7 @@ class Trigger extends Component {
             </tr>
           </thead>
           <tbody>
-            {_.map(_.reverse(completedTriggers), (trigger, index) => {
+            {_.map(completedTriggers, (trigger, index) => {
               return (
                 <tr key={index}>
                   <td>{trigger.id}</td>
