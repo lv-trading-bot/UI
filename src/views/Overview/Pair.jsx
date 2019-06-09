@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Badge } from 'reactstrap';
 import Proptypes from 'prop-types';
+import moment from 'moment';
 
 import _ from 'lodash';
 
@@ -50,7 +51,7 @@ class Pair extends Component {
             </td>)
 
         listRes.push(<td key={"set_by"}>{pairControl.set_by}</td>);
-        listRes.push(<td key={"last_update"}>{pairControl.last_update}</td>);
+        listRes.push(<td key={"last_update"}>{moment(pairControl.last_update).format("DD-MM-YYYY HH:mm")}</td>);
 
         let listStatus = this.props.props_status.statuss;
         let status = _.find(listStatus, stt => stt.id === id) || {status: "unknown"};
@@ -90,7 +91,7 @@ class Pair extends Component {
                 <td onClick={this.props.onClick} style={{cursor: "pointer"}}>{`${this.props.currency.toLocaleString()} ${this.props.currency_name}`}</td>
                 <td onClick={this.props.onClick} style={{cursor: "pointer"}}>{this.props.price.toLocaleString()}</td>
                 <td onClick={this.props.onClick} style={{cursor: "pointer"}}>{`${(this.props.currency + this.props.asset * this.props.price).toLocaleString()} ${this.props.currency_name}`}</td>
-                <td onClick={this.props.onClick} style={{cursor: "pointer"}}>{this.props.last_update}</td>
+                <td onClick={this.props.onClick} style={{cursor: "pointer"}}>{moment(this.props.last_update).format("DD-MM-YYYY HH:mm")}</td>
                 <td onClick={this.props.onClick} style={{cursor: "pointer"}}>{this.renderStatus(this.props.id)}</td>
                 {this.renderPairControl(this.props.id, this.props.asset_name, this.props.currency_name)}
             </tr>

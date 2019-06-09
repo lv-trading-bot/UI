@@ -76,7 +76,7 @@ class PairDetail extends Component {
         infos = [
           {
             name: "Start time",
-            value: _.get(curPortfolio, "startTime", ""),
+            value: _.get(curPortfolio, "startTime", "") === "" ? "" : moment(_.get(curPortfolio, "startTime", "")).format("DD-MM-YYYY HH:mm"),
             description: "Thời gian bắt đầu"
           },
           { 

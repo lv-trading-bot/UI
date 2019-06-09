@@ -164,10 +164,10 @@ class Trigger extends Component {
                   <td>{trigger.properties.currentInitialPrice}</td>
                   <td>{trigger.properties.stopLoss}</td>
                   <td>{trigger.properties.takeProfit}</td>
-                  <td>{trigger.properties.expires}</td>
+                  <td>{moment(trigger.properties.expires).format("DD-MM-YYYY HH:mm")}</td>
                   <td>{`${trigger.properties.assetAmount} ${curPair.asset_name}`}</td>
                   <td>{`${(100 * ((parseFloat(curPortfolio.price) - parseFloat(trigger.properties.currentInitialPrice)) / parseFloat(trigger.properties.currentInitialPrice))).toFixed(5)} %`}</td>
-                  <td>{trigger.at}</td>
+                  <td>{moment(trigger.at).format("DD-MM-YYYY HH:mm")}</td>
                 </tr>
               )
             })}
@@ -220,10 +220,10 @@ class Trigger extends Component {
                   <td>{trigger.meta.initialPrice}</td>
                   <td>{trigger.meta.exitPrice}</td>
                   <td>{`${trigger.meta.trend.toFixed(5)} %`}</td>
-                  <td>{trigger.meta.expires}</td>
+                  <td>{moment(trigger.meta.expires).format("DD-MM-YYYY HH:mm")}</td>
                   <td>{trigger.meta.assetAmount}</td>
-                  <td>{trigger.meta.initialStart}</td>
-                  <td>{trigger.meta.exitAt}</td>
+                  <td>{moment(trigger.meta.initialStart).format("DD-MM-YYYY HH:mm")}</td>
+                  <td>{moment(trigger.meta.exitAt).format("DD-MM-YYYY HH:mm")}</td>
                 </tr>
               )
             })}

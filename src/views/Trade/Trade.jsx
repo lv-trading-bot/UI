@@ -3,6 +3,7 @@ import { Card, CardBody, CardHeader, Col, Row, Table, Badge } from 'reactstrap';
 import _ from 'lodash';
 import { genarateAssetCurrencyId } from '../../utils';
 import Filter from '../../components/Filter';
+import moment from 'moment';
 
 class Trade extends Component {
 
@@ -87,7 +88,7 @@ class Trade extends Component {
                   <td>{trade.price}</td>
                   <td>{`${trade.amount * (isBuy ? trade.price : 1)} ${(isBuy ? curPair.currency_name : curPair.asset_name)}`}</td>
                   <td>{`${trade.amountWithFee * (isBuy ? 1 : trade.price)} ${(isBuy ? curPair.asset_name : curPair.currency_name)}`}</td>
-                  <td>{trade.date}</td>
+                  <td>{moment(trade.date).format("DD-MM-YYYY HH:mm")}</td>
                   <td>{trade.cost.toFixed(5)}</td>
                   <td>
                     {(isBuy ? 

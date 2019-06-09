@@ -4,6 +4,7 @@ import _ from 'lodash';
 import ReactJson from 'react-json-view';
 import { genarateAssetCurrencyId } from '../../utils';
 import Filter from '../../components/Filter';
+import moment from 'moment';
 
 class Advice extends Component {
 
@@ -77,7 +78,7 @@ class Advice extends Component {
             {_.map(_.reverse(_.cloneDeep(props[assetCurrencyId].advices)), (advice, index) => {
               return (
                 <tr key={index}>
-                  <td>{advice.at}</td>
+                  <td>{moment(advice.at).format("DD-MM-YYYY HH:mm")}</td>
                   <td>
                     <ReactJson 
                       src={_.omit(advice.body, ['id', 'asset', 'currency', '_id'])} 

@@ -467,7 +467,7 @@ export default class RunGekko extends Component {
                                 label="Mail tag"
                                 nameField="mailTag"
                                 placeholder="[GEKKO]"
-                                description="Prfix email"
+                                description="Prefix the email"
                                 formData={this.state.formData}
                                 value={this.state.formData.mailTag}
                                 onChange={this.onChangeDataOfFields}
