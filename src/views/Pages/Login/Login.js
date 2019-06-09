@@ -25,7 +25,7 @@ class Login extends Component {
 					localStorage.setItem('token', token);
 					axios.defaults.headers.common['Authorization'] = token;
 					let prevUrl = window.location.hash.split("prevUrl=")[1];
-					window.location.hash = `/#/${prevUrl}`;
+					window.location.hash = `${prevUrl}`;
 					setTimeout(() => {
 						window.location.reload();
 					}, 1000)
