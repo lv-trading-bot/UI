@@ -12,32 +12,32 @@ export default {
     {
       name: 'Overview',
       url: '/overview',
-      icon: 'icon-speedometer',
+      icon: 'icon-chart',
     },
     {
       name: 'Run Gekko',
       url: '/run-gekko',
-      icon: 'icon-speedometer',
+      icon: 'icon-energy',
     },
     {
       name: 'Status',
       url: '/status',
-      icon: 'icon-speedometer',
+      icon: 'icon-ghost',
     },
     {
       name: 'Trigger',
       url: '/trigger',
-      icon: 'icon-puzzle',
+      icon: 'fa fa-tasks',
     },
     {
       name: 'Trade',
       url: '/trade',
-      icon: 'icon-list',
+      icon: 'fa fa-exchange',
     },
     {
       name: 'Advice',
       url: '/advice',
-      icon: 'icon-list',
+      icon: 'fa fa-magic',
     },
     // {
     //   title: true,
@@ -185,41 +185,41 @@ export default {
     //   url: '/charts',
     //   icon: 'icon-pie-chart',
     // },
-    {
-      name: 'Icons',
-      url: '/icons',
-      icon: 'icon-star',
-      children: [
-        {
-          name: 'CoreUI Icons',
-          url: '/icons/coreui-icons',
-          icon: 'icon-star',
-          badge: {
-            variant: 'info',
-            text: 'NEW',
-          },
-        },
-        // {
-        //   name: 'Flags',
-        //   url: '/icons/flags',
-        //   icon: 'icon-star',
-        // },
-        {
-          name: 'Font Awesome',
-          url: '/icons/font-awesome',
-          icon: 'icon-star',
-          badge: {
-            variant: 'secondary',
-            text: '4.7',
-          },
-        },
-        {
-          name: 'Simple Line Icons',
-          url: '/icons/simple-line-icons',
-          icon: 'icon-star',
-        },
-      ],
-    },
+    // {
+    //   name: 'Icons',
+    //   url: '/icons',
+    //   icon: 'icon-star',
+    //   children: [
+    //     {
+    //       name: 'CoreUI Icons',
+    //       url: '/icons/coreui-icons',
+    //       icon: 'icon-star',
+    //       badge: {
+    //         variant: 'info',
+    //         text: 'NEW',
+    //       },
+    //     },
+    //     // {
+    //     //   name: 'Flags',
+    //     //   url: '/icons/flags',
+    //     //   icon: 'icon-star',
+    //     // },
+    //     {
+    //       name: 'Font Awesome',
+    //       url: '/icons/font-awesome',
+    //       icon: 'icon-star',
+    //       badge: {
+    //         variant: 'secondary',
+    //         text: '4.7',
+    //       },
+    //     },
+    //     {
+    //       name: 'Simple Line Icons',
+    //       url: '/icons/simple-line-icons',
+    //       icon: 'icon-star',
+    //     },
+    //   ],
+    // },
     // {
     //   name: 'Notifications',
     //   url: '/notifications',

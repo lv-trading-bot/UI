@@ -91,7 +91,7 @@ class Pair extends Component {
                 <td onClick={this.props.onClick} style={{cursor: "pointer"}}>{`${this.props.currency.toLocaleString()} ${this.props.currency_name}`}</td>
                 <td onClick={this.props.onClick} style={{cursor: "pointer"}}>{this.props.price.toLocaleString()}</td>
                 <td onClick={this.props.onClick} style={{cursor: "pointer"}}>{`${(this.props.currency + this.props.asset * this.props.price).toLocaleString()} ${this.props.currency_name}`}</td>
-                <td onClick={this.props.onClick} style={{cursor: "pointer"}}>{moment(this.props.last_update).format("DD-MM-YYYY HH:mm")}</td>
+                <td onClick={this.props.onClick} style={{cursor: "pointer"}}>{moment(this.props.last_update).fromNow()}</td>
                 <td onClick={this.props.onClick} style={{cursor: "pointer"}}>{this.renderStatus(this.props.id)}</td>
                 {this.renderPairControl(this.props.id, this.props.asset_name, this.props.currency_name)}
             </tr>

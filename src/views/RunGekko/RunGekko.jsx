@@ -517,7 +517,7 @@ export default class RunGekko extends Component {
                             {this.state.formData.mode === 'live' && <Text
                                 label="Key"
                                 nameField="key"
-                                placeholder="abcd72ead2a4c6e3d56adec9078"
+                                placeholder="API KEY"
                                 description="Key of binance, gekko will use it for trading"
                                 formData={this.state.formData}
                                 value={this.state.formData.key}
@@ -529,7 +529,7 @@ export default class RunGekko extends Component {
                             {this.state.formData.mode === 'live' && <Text
                                 label="Secret"
                                 nameField="secret"
-                                placeholder="2a4c6e3ddab907cd72eadec56a8"
+                                placeholder="SECRET KEY"
                                 description="Secret of binance, gekko will use it for trading"
                                 formData={this.state.formData}
                                 value={this.state.formData.secret}
