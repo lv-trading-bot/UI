@@ -113,6 +113,17 @@ export default class RunGekko extends Component {
         })
     }
 
+    backtest = () => {
+        this.setState({ isSubmitting: true }, () => {
+            let config = this.transformToDataPost(this.state.formData);
+            let { isValid } = this.checkValidForm(config);
+            if (isValid) {
+                this.props.pushFromDataToBacktest(config);
+                setTimeout(() => this.props.history.push('/backtest'), 1000)
+            }
+        })
+    }
+
     /**
     "asset_name": "BTC",
     "currency_name": "USDT",
@@ -185,8 +196,8 @@ export default class RunGekko extends Component {
         }
 
         let transformedData = {
-            "asset_name": _.upperCase(formData.asset_name),
-            "currency_name": _.upperCase(formData.currency_name),
+            "asset_name": _.toUpper(_.replace(formData.asset_name, " ", "")),
+            "currency_name": _.toUpper(_.replace(formData.currency_name, " ", "")),
             "candleSize": !_.isEmpty(formData.candleSize) ? parseInt(formData.candleSize) : formData.candleSize,
             "stopLoss": !_.isEmpty(formData.stopLoss) ? parseFloat(formData.stopLoss) : formData.stopLoss,
             "takeProfit": !_.isEmpty(formData.takeProfit) ? parseFloat(formData.takeProfit) : formData.takeProfit,
@@ -544,7 +555,7 @@ export default class RunGekko extends Component {
                         </CardBody>
                         <CardFooter>
                             <div style={{ textAlign: "right" }}>
-                                {/* <Button type="button" size="sm" color="primary"><i className="fa fa-dot-circle-o"></i>Backtest</Button> */}
+                                <Button type="button" size="sm" color="primary" onClick={this.backtest}>{/*<i className="fa fa-dot-circle-o"></i>*/}Backtest</Button>
                                 <Button type="button" size="sm" color="danger" onClick={this.runGekko}>{/*<i className="fa fa-ban"></i>*/}Run</Button>
                             </div>
                         </CardFooter>

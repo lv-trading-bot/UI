@@ -13,7 +13,8 @@ export default class DateTime extends Component {
         onChange: PropTypes.func.isRequired,
         isError: PropTypes.bool,
         isSubmitting: PropTypes.bool,
-        errorMessage: PropTypes.string
+        errorMessage: PropTypes.string,
+        disable: PropTypes.bool
     }
 
     state = {}
@@ -36,6 +37,7 @@ export default class DateTime extends Component {
                         invalid={this.props.isError && this.state.isTouch}
                         valid={!this.props.isError && this.state.isTouch}
                         onBlur={() => this.setState({ isTouch: true })}
+                        disabled={this.props.disable}
                     />
                     <FormText color="muted">{this.props.description}</FormText>
                     {isTouchOrSudmit && this.props.isError && <FormText color="danger">{this.props.errorMessage || "This field is require"}</FormText>}

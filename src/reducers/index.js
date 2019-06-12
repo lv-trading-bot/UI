@@ -7,5 +7,6 @@ import trade from './trade';
 import advice from './advice';
 import pairControl from './pairControl';
 import gekko from './gekko';
+import backtest from './backtest';
 
-export default combineReducers({overview, config, status, trigger, trade, advice, pairControl, gekko});
+export default combineReducers({overview, config, status, trigger, trade, advice, pairControl, gekko, backtest});

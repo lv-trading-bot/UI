@@ -63,3 +63,10 @@ export const startGekko = (gekkoContainerName) => ({
     },
     headers: {}
 })
+
+export const backtest = (config) => ({
+    url: process.env.REACT_APP_LIVE_TRADING_MANAGER_HOST + "/backtest",
+    method: "POST",
+    params: config,
+    headers: {}
+})

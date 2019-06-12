@@ -1,19 +1,19 @@
-import RunGekko from '../../views/RunGekko';
+import BacktestResult from '../../views/BacktestResult';
 import {connect} from 'react-redux';
 import {runGekko} from '../../actions/Gekko';
-import {pushFormData} from '../../actions/Backtest'
+import {backtest} from '../../actions/Backtest';
 
 const mapStateToProps = (state, ownProps) => {
     return {
-      ...state.gekko
+      ...state.backtest
     }
 }
 
 const mapDispatchToProps = (dispatch, ownProps) => {
     return {
       runGekko: (config) => dispatch(runGekko(config)),
-      pushFromDataToBacktest: (formData) => dispatch(pushFormData(formData))
+      backtest: (config) => dispatch(backtest(config))
     }
   }
 
-export default connect(mapStateToProps, mapDispatchToProps)(RunGekko);
+export default connect(mapStateToProps, mapDispatchToProps)(BacktestResult);
