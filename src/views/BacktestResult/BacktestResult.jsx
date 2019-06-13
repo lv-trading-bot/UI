@@ -206,7 +206,7 @@ class BacktestResult extends Component {
 	}
 
 	renderBacktestResult = () => {
-		let performanceReport = this.props.response.performanceReport;
+		let performanceReport = this.props.response.performanceReport || {};
 		let roundtrips = this.props.response.roundtrips || [];
 		let infos = [];
 		if (true) {

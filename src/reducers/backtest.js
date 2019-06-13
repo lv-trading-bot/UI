@@ -18,7 +18,10 @@ export default (state = initialState, action) => {
         case backtestAction.BEGIN_BACKTEST: {
             return {
                 ...state,
-                isLoading: true
+                isLoading: true,
+                response: null,
+                isError: false,
+                errorMessage: null
             }
         }
         case backtestAction.BACKTEST_DONE: {
