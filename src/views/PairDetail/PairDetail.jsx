@@ -115,11 +115,6 @@ class PairDetail extends Component {
             description: "((tổng số tiền trade bán + số asset đang giữ của con đó * price) - tổng số tiền trade mua === số tiền lời)" 
           },
           { 
-            name: "Current price", 
-            value: `${curPortfolio.price} (${curPortfolio.last_update ? moment(curPortfolio.last_update).fromNow() : "unknown"})`, 
-            description: "" 
-          },
-          { 
             name: "Asset", 
             value: `${curPortfolio.asset} ${curPortfolio.asset_name}`, 
             description: "" 
@@ -151,6 +146,11 @@ class PairDetail extends Component {
             description: "" 
           },
           { 
+            name: "Current price", 
+            value: `${curPortfolio.price} (${curPortfolio.last_update ? moment(curPortfolio.last_update).fromNow() : "unknown"})`, 
+            description: "" 
+          },
+          { 
             name: "Market (%)", 
             value: (100 * (parseFloat(_.get(curPortfolio, "price", 0)) 
                   - parseFloat(_.get(curPortfolio, "initPortfolio.price", 0)))
@@ -165,7 +165,6 @@ class PairDetail extends Component {
             <tr>
               <th>Name</th>
               <th>Value</th>
-              <th>Description</th>
             </tr>
           </thead>
           <tbody>
@@ -174,7 +173,6 @@ class PairDetail extends Component {
                 <tr key={index}>
                   <td>{info.name}</td>
                   <td>{info.value}</td>
-                  <td>{info.description}</td>
                 </tr>
               )
             })}
@@ -201,7 +199,7 @@ class PairDetail extends Component {
     return (
       <div className="animated fadeIn">
         <Row>
-          <Col sm={12}>
+          <Col sm={12} md={{size: 6}}>
             <Card>
               <CardHeader>
                 <strong><i className="icon-info pr-1"></i>{
@@ -213,7 +211,7 @@ class PairDetail extends Component {
               </CardBody>
             </Card>
           </Col>
-          <Col sm={12}>
+          <Col sm={12} md={{size: 6}}>
             <Card>
               <CardHeader>
                 <strong><i className="icon-info pr-1"></i>Config</strong>
