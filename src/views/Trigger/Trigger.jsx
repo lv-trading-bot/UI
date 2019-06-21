@@ -83,15 +83,11 @@ class Trigger extends Component {
         },
         {
           name: "Profitable Trigger",
-          value: _.filter(listTrigger, trigger => trigger.what && trigger.what.toLowerCase() === 'takeprofit').length
+          value: _.filter(listTrigger, c => c.what && parseFloat(_.get(c, "meta.exitPrice", 0)) > parseFloat(_.get(c, "meta.initialPrice", 0))).length
         },
         {
           name: "Loss-making Trigger",
-          value: _.filter(listTrigger, trigger => trigger.what && trigger.what.toLowerCase() === 'stoploss').length
-        },
-        {
-          name: "Expired Trigger",
-          value: _.filter(listTrigger, trigger => trigger.what && trigger.what.toLowerCase() === 'expires').length
+          value: _.filter(listTrigger, c => c.what && parseFloat(_.get(c, "meta.exitPrice", 0)) <= parseFloat(_.get(c, "meta.initialPrice", 0))).length
         },
         {
           name: "Total",
@@ -145,7 +141,7 @@ class Trigger extends Component {
               <th>Id</th>
               <th>Type</th>
               <th>Initial Price</th>
-              <th>Current Initial Price</th>
+              <th>Transfered Price</th>
               <th>Stop Loss</th>
               <th>Take Profit</th>
               <th>Expires</th>
@@ -156,6 +152,7 @@ class Trigger extends Component {
           </thead>
           <tbody>
             {_.map(runningTriggers, (trigger, index) => {
+              let trend = (100 * ((parseFloat(curPortfolio.price) - parseFloat(trigger.properties.currentInitialPrice)) / parseFloat(trigger.properties.currentInitialPrice))).toFixed(5);
               return (
                 <tr key={index}>
                   <td>{trigger.id}</td>
@@ -166,7 +163,7 @@ class Trigger extends Component {
                   <td>{trigger.properties.takeProfit}</td>
                   <td>{moment(trigger.properties.expires).format("DD-MM-YYYY HH:mm")}</td>
                   <td>{`${trigger.properties.assetAmount} ${curPair.asset_name}`}</td>
-                  <td>{`${(100 * ((parseFloat(curPortfolio.price) - parseFloat(trigger.properties.currentInitialPrice)) / parseFloat(trigger.properties.currentInitialPrice))).toFixed(5)} %`}</td>
+                  <td>{(trend > 0 ? (<Badge color="success">{trend + " %"}</Badge>) : (<Badge color="danger">{trend + " %"}</Badge>))}</td>
                   <td>{moment(trigger.at).format("DD-MM-YYYY HH:mm")}</td>
                 </tr>
               )
@@ -201,14 +198,15 @@ class Trigger extends Component {
               <th>Initial Price</th>
               <th>Exit price</th>
               <th>Profit (%)</th>
-              <th>Expires</th>
               <th>Asset Amount</th>
+              <th>Time Span</th>
               <th>Start At</th>
               <th>Stop At</th>
             </tr>
           </thead>
           <tbody>
             {_.map(completedTriggers, (trigger, index) => {
+              let trend = (100 * ((parseFloat(trigger.meta.exitPrice) - parseFloat(trigger.meta.initialPrice)) / parseFloat(trigger.meta.initialPrice))).toFixed(5);
               return (
                 <tr key={index}>
                   <td>{trigger.id}</td>
@@ -219,9 +217,9 @@ class Trigger extends Component {
                       : (<Badge color="danger">{trigger.what}</Badge>))}</td>
                   <td>{trigger.meta.initialPrice}</td>
                   <td>{trigger.meta.exitPrice}</td>
-                  <td>{`${trigger.meta.trend.toFixed(5)} %`}</td>
-                  <td>{moment(trigger.meta.expires).format("DD-MM-YYYY HH:mm")}</td>
+                  <td>{(trend > 0 ? (<Badge color="success">{trend + " %"}</Badge>) : (<Badge color="danger">{trend + " %"}</Badge>))}</td>
                   <td>{trigger.meta.assetAmount}</td>
+                  <td>{moment.duration(moment(trigger.meta.exitAt).diff(moment(trigger.meta.initialStart))).asHours().toFixed(2) + " h"}</td>
                   <td>{moment(trigger.meta.initialStart).format("DD-MM-YYYY HH:mm")}</td>
                   <td>{moment(trigger.meta.exitAt).format("DD-MM-YYYY HH:mm")}</td>
                 </tr>

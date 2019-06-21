@@ -58,7 +58,6 @@ class Trade extends Component {
 	}
 
 	changePage = (nextPage) => {
-		debugger
 		let curPair = this.props.pair, props = this.props;
 		let assetCurrencyId = genarateAssetCurrencyId(curPair.asset_name, curPair.currency_name, curPair.id);
 		if (nextPage < this.state.page && nextPage < 1) {
@@ -96,7 +95,7 @@ class Trade extends Component {
 								<th>Amount</th>
 								<th>Amount With Fee</th>
 								<th>At</th>
-								<th>Cost</th>
+								<th>Fee Percent</th>
 								<th>Action</th>
 							</tr>
 						</thead>

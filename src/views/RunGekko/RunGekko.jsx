@@ -327,18 +327,6 @@ export default class RunGekko extends Component {
                                 errorMessage={errorMessage["takeProfit"]}
                             />
                             <Number
-                                label="Amount for one trade"
-                                nameField="amountForOneTrade"
-                                placeholder="100"
-                                description="Gekko will buy 100 currency if it is 100. Unit is currency"
-                                formData={this.state.formData}
-                                value={this.state.formData.amountForOneTrade}
-                                onChange={this.onChangeDataOfFields}
-                                isError={!_.isEmpty(errorMessage["amountForOneTrade"])}
-                                isSubmitting={this.state.isSubmitting}
-                                errorMessage={errorMessage["amountForOneTrade"]}
-                            />
-                            <Number
                                 label="Expiration period"
                                 nameField="expirationPeriod"
                                 placeholder="24"
@@ -485,6 +473,18 @@ export default class RunGekko extends Component {
                                 isError={!_.isEmpty(errorMessage["mailTag"])}
                                 isSubmitting={this.state.isSubmitting}
                                 errorMessage={errorMessage["mailTag"]}
+                            />
+                            <Number
+                                label="Amount for one trade"
+                                nameField="amountForOneTrade"
+                                placeholder="100"
+                                description="Gekko will buy 100 currency if it is 100. Unit is currency"
+                                formData={this.state.formData}
+                                value={this.state.formData.amountForOneTrade}
+                                onChange={this.onChangeDataOfFields}
+                                isError={!_.isEmpty(errorMessage["amountForOneTrade"])}
+                                isSubmitting={this.state.isSubmitting}
+                                errorMessage={errorMessage["amountForOneTrade"]}
                             />
                             <Option
                                 label="Mode"

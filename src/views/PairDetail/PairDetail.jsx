@@ -91,18 +91,13 @@ class PairDetail extends Component {
           },
           { 
             name: "Number of profitable triggers", 
-            value: _.filter(curListTrigger, c => c.what && c.what.toLowerCase() === 'takeprofit').length, 
+            value: _.filter(curListTrigger, c => c.what && parseFloat(_.get(c, "meta.exitPrice", 0)) > parseFloat(_.get(c, "meta.initialPrice", 0))).length, 
             description: "Số lượng trigger lời" 
           },
           { 
             name: "Number of loss-making triggers", 
-            value: _.filter(curListTrigger, c => c.what && c.what.toLowerCase() === 'stoploss').length, 
+            value: _.filter(curListTrigger, c => c.what && parseFloat(_.get(c, "meta.exitPrice", 0)) <= parseFloat(_.get(c, "meta.initialPrice", 0))).length, 
             description: "Số lượng trigger lỗ" 
-          },
-          { 
-            name: "Number of expired triggers", 
-            value: _.filter(curListTrigger, c => c.what && c.what.toLowerCase() === 'expires').length, 
-            description: "Số lượng trigger hết hạn" 
           },
           { 
             name: "Number of running triggers", 
