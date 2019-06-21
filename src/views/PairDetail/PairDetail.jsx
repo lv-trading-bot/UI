@@ -70,7 +70,12 @@ class PairDetail extends Component {
       let tong_asset_dang_giu = _.filter(curListTrigger, c => !c.what).reduce((res, v) => res + v.properties.assetAmount, 0);
       let tong_tien_trade_mua = _.filter(curListTrade, c => c.action.toLowerCase() === 'buy').reduce((res, v) => res + v.amount * v.effectivePrice, 0);
       let estimatedProfit = tong_tien_trade_ban + (tong_asset_dang_giu * curPortfolio.price) - tong_tien_trade_mua;
-
+      console.log(tong_tien_trade_ban, tong_asset_dang_giu, tong_tien_trade_mua, estimatedProfit, curPortfolio.price);
+      console.log('tong_tien_trade_ban', tong_tien_trade_ban);
+      console.log('tong_asset_dang_giu', tong_asset_dang_giu);
+      console.log('tong_tien_trade_mua', tong_tien_trade_mua);
+      console.log('estimatedProfit', estimatedProfit);
+      console.log('curPortfolio.price', curPortfolio.price);
       let infos = [];
       if (curPortfolio) {
         infos = [
@@ -106,24 +111,24 @@ class PairDetail extends Component {
           },
           { 
             name: "Estimated profit", 
-            value: estimatedProfit + ` ${curPair.currency_name}`, 
+            value: estimatedProfit.toFixed(5) + ` ${curPair.currency_name}`, 
             description: "((tổng số tiền trade bán + số asset đang giữ của con đó * price) - tổng số tiền trade mua === số tiền lời)" 
           },
           { 
             name: "Asset", 
-            value: `${curPortfolio.asset} ${curPortfolio.asset_name}`, 
+            value: `${curPortfolio.asset.toFixed(5)} ${curPortfolio.asset_name}`, 
             description: "" 
           },
           { 
             name: "Currency", 
-            value: `${curPortfolio.currency} ${curPortfolio.currency_name}`, 
+            value: `${curPortfolio.currency.toFixed(5)} ${curPortfolio.currency_name}`, 
             description: "" 
           },
           { 
             name: "Original balance", 
             value: (parseFloat(_.get(curPortfolio, "initPortfolio.currency", 0)) 
                   + parseFloat(_.get(curPortfolio, "initPortfolio.asset", 0)) 
-                  * parseFloat(_.get(curPortfolio, "initPortfolio.price", 0))) 
+                  * parseFloat(_.get(curPortfolio, "initPortfolio.price", 0))).toFixed(5) 
                   + ` ${curPortfolio.currency_name}`, 
             description: "" 
           },
@@ -131,7 +136,7 @@ class PairDetail extends Component {
             name: "Estimated balance", 
             value: (parseFloat(curPortfolio.currency) 
             + parseFloat(curPortfolio.asset) 
-            * parseFloat(curPortfolio.price))
+            * parseFloat(curPortfolio.price)).toFixed(5)
             + ` ${curPortfolio.currency_name}`, 
             description: "" 
           },

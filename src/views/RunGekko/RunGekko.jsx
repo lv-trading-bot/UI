@@ -33,10 +33,8 @@ const paramsTypeOfPostRunGekko = {
     decisionThreshold: (val, body, key) => (
         !_.isNaN(parseFloat(val)) ? undefined : `${key} is not valid`
     ),
-    stopTradeLimit: (val, body, key) => { body.stopTradeLimit = -1; return undefined; },
-    breakDuration: (val, body, key) => (
-        !_.isNaN(parseFloat(val)) ? undefined : `${key} is not valid`
-    ),
+    stopTradeLimit: (val, body, key) => !_.isNaN(parseFloat(val)) ? undefined : `${key} is not valid`,
+    breakDuration: (val, body, key) => { body.breakDuration = -1; return undefined; },
     model_type: (val, body, key) => {
         return !_.isEmpty(val) ? undefined : `${key} is required`
     },/* && (val === 'rolling' || val === 'fixed')*/
