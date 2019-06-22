@@ -20,26 +20,35 @@ class PairDetail extends Component {
     if (!this.props.isLoaded && !this.props.isLoading) {
       this.props.loadConfig();
     }
+
+    let curPair = this.props.pair;
+
+    if (curPair.asset_name && curPair.currency_name && curPair.id) {
+      this.props.loadTrigger(curPair.id, curPair.asset_name, curPair.currency_name, undefined, undefined, 10000);
+      this.props.loadTrade(curPair.id, curPair.asset_name, curPair.currency_name, undefined, undefined, 10000);
+    }
   }
 
   componentWillReceiveProps(nextProps) {
     let nextPair = nextProps.pair;
+    let curPair = this.props.pair;
 
-    let assetCurrencyId = genarateAssetCurrencyId(nextPair.asset_name, nextPair.currency_name, nextPair.id);
+    // let assetCurrencyId = genarateAssetCurrencyId(nextPair.asset_name, nextPair.currency_name, nextPair.id);
 
     // Check xem trigger của pair đó đã nạp chưa
     if (nextPair.asset_name && nextPair.currency_name && nextPair.id) {
-      if (!nextProps.trigger[assetCurrencyId] || (!nextProps.trigger[assetCurrencyId].isLoaded && !nextProps.trigger[assetCurrencyId].isLoading)) {
-        this.props.loadTrigger(nextPair.id, nextPair.asset_name, nextPair.currency_name);
+      if (curPair.asset_name !== nextPair.asset_name || curPair.currency_name !== nextPair.currency_name || curPair.id !== nextPair.id) {
+        this.props.loadTrigger(nextPair.id, nextPair.asset_name, nextPair.currency_name, undefined, undefined, 10000);
+        this.props.loadTrade(nextPair.id, nextPair.asset_name, nextPair.currency_name, undefined, undefined, 10000);
       }
     }
 
-    // Check xem trade của pair đó đã nạp chưa
-    if (nextPair.asset_name && nextPair.currency_name && nextPair.id) {
-      if (!nextProps.trade[assetCurrencyId] || (!nextProps.trade[assetCurrencyId].isLoaded && !nextProps.trade[assetCurrencyId].isLoading)) {
-        this.props.loadTrade(nextPair.id, nextPair.asset_name, nextPair.currency_name);
-      }
-    }
+    // // Check xem trade của pair đó đã nạp chưa
+    // if (nextPair.asset_name && nextPair.currency_name && nextPair.id) {
+    //   if (!nextProps.trade[assetCurrencyId] || (!nextProps.trade[assetCurrencyId].isLoaded && !nextProps.trade[assetCurrencyId].isLoading)) {
+    //     this.props.loadTrade(nextPair.id, nextPair.asset_name, nextPair.currency_name);
+    //   }
+    // }
 
     if (!nextProps.overview.isLoaded && !nextProps.overview.isLoading) {
       this.props.loadPortfolio();
@@ -66,16 +75,16 @@ class PairDetail extends Component {
       let curListTrigger = _.get(props, `trigger.${assetCurrencyId}.triggers`, []);
       let curListTrade = _.get(props, `trade.${assetCurrencyId}.trades`, []);
 
-      let tong_tien_trade_ban = _.filter(curListTrade, c => c.action.toLowerCase() === 'sell').reduce((res, v) => res + (v.amount * v.effectivePrice), 0);
+      let tong_tien_trade_ban = _.filter(curListTrade, c => c.action.toLowerCase() === 'sell').reduce((res, v) => res + (v.amountWithFee * v.price), 0); // Ở đây dùng amountWithFee (đã trừ phí) * price = số tiền thu được sau khi bán asset
       let tong_asset_dang_giu = _.filter(curListTrigger, c => !c.what).reduce((res, v) => res + v.properties.assetAmount, 0);
-      let tong_tien_trade_mua = _.filter(curListTrade, c => c.action.toLowerCase() === 'buy').reduce((res, v) => res + v.amount * v.effectivePrice, 0);
+      let tong_tien_trade_mua = _.filter(curListTrade, c => c.action.toLowerCase() === 'buy').reduce((res, v) => res + (v.amountWithFee * v.effectivePrice), 0); //  ở đây dùng amountWithFee * effectivePrice = số tiền bỏ ra để mua asset
       let estimatedProfit = tong_tien_trade_ban + (tong_asset_dang_giu * curPortfolio.price) - tong_tien_trade_mua;
-      console.log(tong_tien_trade_ban, tong_asset_dang_giu, tong_tien_trade_mua, estimatedProfit, curPortfolio.price);
-      console.log('tong_tien_trade_ban', tong_tien_trade_ban);
-      console.log('tong_asset_dang_giu', tong_asset_dang_giu);
-      console.log('tong_tien_trade_mua', tong_tien_trade_mua);
-      console.log('estimatedProfit', estimatedProfit);
-      console.log('curPortfolio.price', curPortfolio.price);
+      // console.log(tong_tien_trade_ban, tong_asset_dang_giu, tong_tien_trade_mua, estimatedProfit, curPortfolio.price);
+      // console.log('tong_tien_trade_ban', tong_tien_trade_ban);
+      // console.log('tong_asset_dang_giu', tong_asset_dang_giu, tong_asset_dang_giu * curPortfolio.price);
+      // console.log('tong_tien_trade_mua', tong_tien_trade_mua);
+      // console.log('estimatedProfit', estimatedProfit);
+      // console.log('curPortfolio.price', curPortfolio.price);
       let infos = [];
       if (curPortfolio) {
         infos = [
@@ -84,78 +93,78 @@ class PairDetail extends Component {
             value: _.get(curPortfolio, "startTime", "") === "" ? "" : moment(_.get(curPortfolio, "startTime", "")).format("DD-MM-YYYY HH:mm"),
             description: "Thời gian bắt đầu"
           },
-          { 
-            name: "Time span", 
-            value: curPortfolio.startTime ? moment(curPortfolio.startTime).fromNow() : "", 
-            description: "Thời gian tiêu tốn" 
+          {
+            name: "Time span",
+            value: curPortfolio.startTime ? moment(curPortfolio.startTime).fromNow() : "",
+            description: "Thời gian tiêu tốn"
           },
-          { 
-            name: "Number of triggers", 
-            value: curListTrigger.length, 
-            description: "Tổng số các trigger" 
+          {
+            name: "Number of triggers",
+            value: curListTrigger.length,
+            description: "Tổng số các trigger"
           },
-          { 
-            name: "Number of profitable triggers", 
-            value: _.filter(curListTrigger, c => c.what && parseFloat(_.get(c, "meta.exitPrice", 0)) > parseFloat(_.get(c, "meta.initialPrice", 0))).length, 
-            description: "Số lượng trigger lời" 
+          {
+            name: "Number of profitable triggers",
+            value: _.filter(curListTrigger, c => c.what && parseFloat(_.get(c, "meta.exitPrice", 0)) > parseFloat(_.get(c, "meta.initialPrice", 0))).length,
+            description: "Số lượng trigger lời"
           },
-          { 
-            name: "Number of loss-making triggers", 
-            value: _.filter(curListTrigger, c => c.what && parseFloat(_.get(c, "meta.exitPrice", 0)) <= parseFloat(_.get(c, "meta.initialPrice", 0))).length, 
-            description: "Số lượng trigger lỗ" 
+          {
+            name: "Number of loss-making triggers",
+            value: _.filter(curListTrigger, c => c.what && parseFloat(_.get(c, "meta.exitPrice", 0)) <= parseFloat(_.get(c, "meta.initialPrice", 0))).length,
+            description: "Số lượng trigger lỗ"
           },
-          { 
-            name: "Number of running triggers", 
-            value: _.filter(curListTrigger, c => !c.what).length, 
-            description: "Số lượng trigger đang chạy" 
+          {
+            name: "Number of running triggers",
+            value: _.filter(curListTrigger, c => !c.what).length,
+            description: "Số lượng trigger đang chạy"
           },
-          { 
-            name: "Estimated profit", 
-            value: estimatedProfit.toFixed(5) + ` ${curPair.currency_name}`, 
-            description: "((tổng số tiền trade bán + số asset đang giữ của con đó * price) - tổng số tiền trade mua === số tiền lời)" 
+          {
+            name: "Estimated profit",
+            value: estimatedProfit.toFixed(5) + ` ${curPair.currency_name}`,
+            description: "((tổng số tiền trade bán + số asset đang giữ của con đó * price) - tổng số tiền trade mua === số tiền lời)"
           },
-          { 
-            name: "Asset", 
-            value: `${curPortfolio.asset.toFixed(5)} ${curPortfolio.asset_name}`, 
-            description: "" 
+          {
+            name: "Asset",
+            value: `${curPortfolio.asset.toFixed(5)} ${curPortfolio.asset_name}`,
+            description: ""
           },
-          { 
-            name: "Currency", 
-            value: `${curPortfolio.currency.toFixed(5)} ${curPortfolio.currency_name}`, 
-            description: "" 
+          {
+            name: "Currency",
+            value: `${curPortfolio.currency.toFixed(5)} ${curPortfolio.currency_name}`,
+            description: ""
           },
-          { 
-            name: "Original balance", 
-            value: (parseFloat(_.get(curPortfolio, "initPortfolio.currency", 0)) 
-                  + parseFloat(_.get(curPortfolio, "initPortfolio.asset", 0)) 
-                  * parseFloat(_.get(curPortfolio, "initPortfolio.price", 0))).toFixed(5) 
-                  + ` ${curPortfolio.currency_name}`, 
-            description: "" 
+          {
+            name: "Original balance",
+            value: (parseFloat(_.get(curPortfolio, "initPortfolio.currency", 0))
+              + parseFloat(_.get(curPortfolio, "initPortfolio.asset", 0))
+              * parseFloat(_.get(curPortfolio, "initPortfolio.price", 0))).toFixed(5)
+              + ` ${curPortfolio.currency_name}`,
+            description: ""
           },
-          { 
-            name: "Estimated balance", 
-            value: (parseFloat(curPortfolio.currency) 
-            + parseFloat(curPortfolio.asset) 
-            * parseFloat(curPortfolio.price)).toFixed(5)
-            + ` ${curPortfolio.currency_name}`, 
-            description: "" 
+          {
+            name: "Estimated balance",
+            value: (parseFloat(curPortfolio.currency)
+              + parseFloat(curPortfolio.asset)
+              * parseFloat(curPortfolio.price)).toFixed(5)
+              + ` ${curPortfolio.currency_name}`,
+            description: ""
           },
-          { 
-            name: "Start price", 
-            value: _.get(curPortfolio, "initPortfolio.price", 0), 
-            description: "" 
+          {
+            name: "Start price",
+            value: _.get(curPortfolio, "initPortfolio.price", 0),
+            description: ""
           },
-          { 
-            name: "Current price", 
-            value: `${curPortfolio.price} (${curPortfolio.last_update ? moment(curPortfolio.last_update).fromNow() : "unknown"})`, 
-            description: "" 
+          {
+            name: "Current price",
+            value: `${curPortfolio.price} (${curPortfolio.last_update ? moment(curPortfolio.last_update).fromNow() : "unknown"})`,
+            description: ""
           },
-          { 
-            name: "Market (%)", 
-            value: (100 * (parseFloat(_.get(curPortfolio, "price", 0)) 
-                  - parseFloat(_.get(curPortfolio, "initPortfolio.price", 0)))
-                  / parseFloat(_.get(curPortfolio, "initPortfolio.price", 0))).toFixed(5) + " %", 
-            description: "" 
+          {
+            name: "Market (%)",
+            value: (100 * (parseFloat(_.get(curPortfolio, "price", 0))
+              - parseFloat(_.get(curPortfolio, "initPortfolio.price", 0)))
+              / parseFloat(_.get(curPortfolio, "initPortfolio.price", 0))).toFixed(5) + " %",
+            description: ""
           },
         ];
       }
@@ -188,7 +197,7 @@ class PairDetail extends Component {
     let curConfig = _.find(this.props.configs, config => config.id === curPair.id);
     let curPortfolio = _.find(this.props.overview.portfolios, portfolio => portfolio.id === curPair.id);
 
-    if(!curPortfolio) {
+    if (!curPortfolio) {
       return (
         <strong><i className="icon-info pr-1"></i>{
           `Pair (Asset: ${this.props.pair.asset_name}, Currency: ${this.props.pair.currency_name}, id: ${this.props.pair.id}) Not found`
@@ -199,7 +208,7 @@ class PairDetail extends Component {
     return (
       <div className="animated fadeIn">
         <Row>
-          <Col sm={12} md={{size: 6}}>
+          <Col sm={12} md={{ size: 6 }}>
             <Card>
               <CardHeader>
                 <strong><i className="icon-info pr-1"></i>{
@@ -211,13 +220,13 @@ class PairDetail extends Component {
               </CardBody>
             </Card>
           </Col>
-          <Col sm={12} md={{size: 6}}>
+          <Col sm={12} md={{ size: 6 }}>
             <Card>
               <CardHeader>
                 <strong><i className="icon-info pr-1"></i>Config</strong>
               </CardHeader>
               <CardBody>
-                <ReactJson src={curConfig} name={false} theme={"flat"} iconStyle="circle" displayDataTypes={false} collapsed={1}/>
+                <ReactJson src={curConfig} name={false} theme={"flat"} iconStyle="circle" displayDataTypes={false} collapsed={1} />
               </CardBody>
             </Card>
           </Col>

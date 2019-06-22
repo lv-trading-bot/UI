@@ -93,9 +93,9 @@ class Trade extends Component {
 								<th>Advice Id</th>
 								<th>Price</th>
 								<th>Amount</th>
-								<th>Amount With Fee</th>
+								<th>Amount After Trade</th>
 								<th>At</th>
-								<th>Fee Percent</th>
+								<th>Fee</th>
 								<th>Action</th>
 							</tr>
 						</thead>
@@ -107,10 +107,10 @@ class Trade extends Component {
 										<td>{trade.id}</td>
 										<td>{trade.adviceId}</td>
 										<td>{trade.price}</td>
-										<td>{`${trade.amount * (isBuy ? trade.price : 1)} ${(isBuy ? curPair.currency_name : curPair.asset_name)}`}</td>
-										<td>{`${trade.amountWithFee * (isBuy ? 1 : trade.price)} ${(isBuy ? curPair.asset_name : curPair.currency_name)}`}</td>
+										<td>{`${(trade.amountWithFee * (isBuy ? trade.effectivePrice : 1)).toFixed(5)} ${(isBuy ? curPair.currency_name : curPair.asset_name)}`}</td>
+										<td>{`${(trade.amountWithFee * (isBuy ? 1 : trade.effectivePrice)).toFixed(5)} ${(isBuy ? curPair.asset_name : curPair.currency_name)}`}</td>
 										<td>{moment(trade.date).format("DD-MM-YYYY HH:mm")}</td>
-										<td>{trade.cost.toFixed(5)}</td>
+										<td>{`${trade.cost.toFixed(5)} ${curPair.currency_name}`}</td>
 										<td>
 											{(isBuy ?
 												(<Badge color="success">Buy</Badge>)
