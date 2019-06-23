@@ -1,7 +1,6 @@
 import { backtestAction } from "../actions/Backtest";
 
 const initialState = {
-    formData: null,
     isLoading: false,
     isError: false,
     errorMessage: null,
@@ -9,11 +8,14 @@ const initialState = {
 }
 export default (state = initialState, action) => {
     switch (action.type) {
-        case backtestAction.PUSH_FORM_DATA: {
-            return {
-                ...state,
-                formData: action.formData
-            }
+        // case backtestAction.PUSH_FORM_DATA: {
+        //     return {
+        //         ...state,
+        //         formData: action.formData
+        //     }
+        // }
+        case backtestAction.BACKTEST_RESET: {
+            return initialState;
         }
         case backtestAction.BEGIN_BACKTEST: {
             return {

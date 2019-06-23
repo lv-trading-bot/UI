@@ -5,8 +5,13 @@ export const backtestAction = {
     PUSH_FORM_DATA: "PUSH_FORM_DATA",
     BEGIN_BACKTEST: "BEGIN_BACKTEST",
     BACKTEST_DONE: "BACKTEST_DONE",
-    BACKTEST_ERROR: "BACKTEST_ERROR"
+    BACKTEST_ERROR: "BACKTEST_ERROR",
+    BACKTEST_RESET: "BACKTEST_RESET"
 }
+
+export const backtestReset = () => ({
+    type: backtestAction.BACKTEST_RESET
+})
 
 export const pushFormData = (formData) => ({
     type: backtestAction.PUSH_FORM_DATA,

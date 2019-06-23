@@ -72,10 +72,10 @@ class Pair extends Component {
                             style={{cursor: "pointer"}}
                             onClick={() => this.props.startGekko(status.containerName)}
                             >{"Start"}</Badge>)
-                    : (<p className="text-danger">{"No control"}</p>)}
+                    : (<span className="text-danger">{"No control"}</span>)}
                 </td>)
         } else {
-            actionEl = <p>Loading...</p>
+            actionEl = <td key={"action"}><span>Loading...</span></td>
         }
         
         listRes.push(actionEl);
