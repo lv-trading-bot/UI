@@ -88,7 +88,8 @@ export default class RunGekko extends Component {
         super(props);
         this.state = {
             formData: {
-                label: "omlbct"
+                label: "omlbct",
+                features: `["open", "high", "low", "close", "volume", "trades"]`
             },
             isSubmitting: false
         };
@@ -122,50 +123,6 @@ export default class RunGekko extends Component {
         })
     }
 
-    /**
-    "asset_name": "BTC",
-    "currency_name": "USDT",
-    "candleSize": 60,
-    "stopLoss": -10,
-    "takeProfit": 2,
-    "amountForOneTrade": 100,
-    "expirationPeriod": 24,
-    "decisionThreshold": 0.5,
-    "stopTradeLimit": -100,
-    "breakDuration": -1,
-    "model_type": "rolling",
-    "model_name": "random_forest",
-    "lag": 23,
-    "features": ["start", "open", "high", "low", "close", "trades", "volume",
-        {
-            "name": "omlbct",
-            "params": {
-                "takeProfit": 2,
-                "stopLoss": -10,
-                "expirationPeriod": 24
-            }
-        },
-        {
-            "name": "TREND_BY_DI",
-            "params": {
-                "period": 14
-            }
-        }
-    ],
-    "label": "omlbct",
-    "train_daterange": {
-        "from": "2019-01-01T00:00:00.000Z",
-        "to": "2019-04-01T00:00:00.000Z"
-    },
-    "rolling_step": 720,
-    "mode": "paper",
-    "asset": 0,
-    "currency": 5000
-    // live
-    key: "jashjdhsd",
-    secret: "erueuishjd",
-     */
-
     onChangeDataOfFields = (nameField, value) => {
         this.setState({
             formData: {
@@ -188,6 +145,15 @@ export default class RunGekko extends Component {
         ];
         try {
             arrFeatures = _.concat(arrFeatures, JSON.parse(this.state.formData.features));
+            arrFeatures = _.map(arrFeatures, (feature) => {
+                if (feature.name && !_.isObject(feature.params)) {
+                    return {
+                        name: feature.name,
+                        params: {}
+                    }
+                }
+                else return feature;
+            })
             arrFeatures = _.filter(arrFeatures, feature => (_.isString(feature) && !_.isEmpty(feature)) || (_.isString(feature.name) && !_.isEmpty(feature.name) && _.isObject(feature.params)));
         } catch (error) {
 
@@ -385,6 +351,18 @@ export default class RunGekko extends Component {
                                 errorMessage={errorMessage["model_type"]}
                             />
                             <Number
+                                label="Rolling step"
+                                nameField="rolling_step"
+                                placeholder="5"
+                                description="Rolling step. Unit is candle"
+                                formData={this.state.formData}
+                                value={this.state.formData.rolling_step}
+                                onChange={this.onChangeDataOfFields}
+                                isError={!_.isEmpty(errorMessage["rolling_step"])}
+                                isSubmitting={this.state.isSubmitting}
+                                errorMessage={errorMessage["rolling_step"]}
+                            />
+                            <Number
                                 label="Lag"
                                 nameField="lag"
                                 placeholder="23"
@@ -447,18 +425,6 @@ export default class RunGekko extends Component {
                                 isError={!_.isEmpty(errorMessage["train_daterange"])}
                                 isSubmitting={this.state.isSubmitting}
                                 errorMessage={errorMessage["train_daterange"]}
-                            />
-                            <Number
-                                label="Rolling step"
-                                nameField="rolling_step"
-                                placeholder="5"
-                                description="Rolling step. Unit is candle"
-                                formData={this.state.formData}
-                                value={this.state.formData.rolling_step}
-                                onChange={this.onChangeDataOfFields}
-                                isError={!_.isEmpty(errorMessage["rolling_step"])}
-                                isSubmitting={this.state.isSubmitting}
-                                errorMessage={errorMessage["rolling_step"]}
                             />
                             <Text
                                 label="Mail tag"

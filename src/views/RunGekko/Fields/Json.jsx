@@ -53,7 +53,7 @@ export default class Json extends Component {
                             showLineNumbers: true,
                             tabSize: 2
                         }}
-                        defaultValue={`["open", "high", "low", "close"]`}
+                        //defaultValue={`["open", "high", "low", "close"]`}
                         onBlur={() => this.setState({ isTouch: true })}
                     />
                     <FormText color="muted">{this.props.description}</FormText>
