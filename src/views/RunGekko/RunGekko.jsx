@@ -78,7 +78,7 @@ const paramsTypeOfPostRunGekko = {
     ),
     mailTag: (val, body, key) => undefined,
     mode: (val, body, key) => (
-        _.isString(val) && !_.isEmpty(val) && (val === 'paper' || val === 'live') ? undefined : `${key} is paper or live`
+        _.isString(val) && !_.isEmpty(val) && (val === 'paper' || val === 'live') ? undefined : `${key} must be paper trading or live trading`
     ), // paper || live
 
     // live
@@ -264,10 +264,10 @@ export default class RunGekko extends Component {
                         <CardBody>
                             {/* <Form action="" method="post" encType="multipart/form-data" className="form-horizontal"> */}
                             <Text
-                                label="Asset Name"
+                                label="Asset name"
                                 nameField="asset_name"
                                 placeholder="BTC"
-                                description="Name of Asset. Example is BTC, ETH, ..."
+                                description="Example: BTC, ETH, XRP"
                                 formData={this.state.formData}
                                 value={this.state.formData.asset_name}
                                 onChange={this.onChangeDataOfFields}
@@ -279,7 +279,7 @@ export default class RunGekko extends Component {
                                 label="Currency name"
                                 nameField="currency_name"
                                 placeholder="USDT"
-                                description="Name of Currency. Example is USDT, BTC, ETH, ..."
+                                description="Example: USDT"
                                 formData={this.state.formData}
                                 value={this.state.formData.currency_name}
                                 onChange={this.onChangeDataOfFields}
@@ -291,7 +291,7 @@ export default class RunGekko extends Component {
                                 label="Candle size"
                                 nameField="candleSize"
                                 placeholder="60"
-                                description="This is a candle size of Gekko. Unit is minute"
+                                description="Candle size in minute"
                                 formData={this.state.formData}
                                 value={this.state.formData.candleSize}
                                 onChange={this.onChangeDataOfFields}
@@ -303,7 +303,7 @@ export default class RunGekko extends Component {
                                 label="Stop loss"
                                 nameField="stopLoss"
                                 placeholder="-10"
-                                description="This is a threshold, gekko will sell if the profit is under the stoploss. Unit is percent"
+                                description="Threshold to sell if the price goes down. Unit: percent"
                                 formData={this.state.formData}
                                 value={this.state.formData.stopLoss}
                                 onChange={this.onChangeDataOfFields}
@@ -315,7 +315,7 @@ export default class RunGekko extends Component {
                                 label="Take profit"
                                 nameField="takeProfit"
                                 placeholder="2"
-                                description="This is a threshold, gekko will sell if the profit is over the takeprofit. Unit is percent"
+                                description="Threshold to buy if the price goes up. Unit: percent"
                                 formData={this.state.formData}
                                 value={this.state.formData.takeProfit}
                                 onChange={this.onChangeDataOfFields}
@@ -327,7 +327,7 @@ export default class RunGekko extends Component {
                                 label="Expiration period"
                                 nameField="expirationPeriod"
                                 placeholder="24"
-                                description="Gekko will hold the trigger. Unit is candle"
+                                description="Trigger will remain alive within this period. Unit: candle"
                                 formData={this.state.formData}
                                 value={this.state.formData.expirationPeriod}
                                 onChange={this.onChangeDataOfFields}
@@ -339,7 +339,7 @@ export default class RunGekko extends Component {
                                 label="Decision threshold"
                                 nameField="decisionThreshold"
                                 placeholder="0.5"
-                                description="Gekko will buy the asset if result of machine learning over the the decition threshold. It &lt; 1 and &gt; 0"
+                                description="Threshold (0 &le; threshold &le; 1) to make decision from the result of Machine Learning server, result &gt; threshold will signal BUY"
                                 formData={this.state.formData}
                                 value={this.state.formData.decisionThreshold}
                                 onChange={this.onChangeDataOfFields}
@@ -351,7 +351,7 @@ export default class RunGekko extends Component {
                                 label="Stop trade limit"
                                 nameField="stopTradeLimit"
                                 placeholder="-100"
-                                description="If gekko make the loss under the stop trade limit, gekko will stop trade. Unit is percent"
+                                description="Total loss-making percent for the system to stop buying more. Unit: percent"
                                 formData={this.state.formData}
                                 value={this.state.formData.stopTradeLimit}
                                 onChange={this.onChangeDataOfFields}
@@ -387,7 +387,7 @@ export default class RunGekko extends Component {
                                 label="Rolling step"
                                 nameField="rolling_step"
                                 placeholder="5"
-                                description="Rolling step. Unit is candle"
+                                description="Rolling step. Unit: candle"
                                 formData={this.state.formData}
                                 value={this.state.formData.rolling_step}
                                 onChange={this.onChangeDataOfFields}
@@ -410,8 +410,8 @@ export default class RunGekko extends Component {
                             <Json
                                 label="Features"
                                 nameField="features"
-                                placeholder="Feature array"
-                                description="Features is an array used for build candle property, member is a string or an object"
+                                placeholder="Features array"
+                                description="Features used for building candle properties, element must be a string or an object"
                                 formData={this.state.formData}
                                 value={this.state.formData.features}
                                 onChange={this.onChangeDataOfFields}
@@ -436,10 +436,10 @@ export default class RunGekko extends Component {
                                 errorMessage={errorMessage["asset_name"]}
                             /> */}
                             <DateTime
-                                label="Train date range from"
+                                label="Train from"
                                 nameField="from"
                                 placeholder="01/05/2019 00:00:00"
-                                description="Data train begin at"
+                                description="Train daterange from"
                                 formData={this.state.formData}
                                 value={this.state.formData.from}
                                 onChange={this.onChangeDataOfFields}
@@ -448,10 +448,10 @@ export default class RunGekko extends Component {
                                 errorMessage={errorMessage["train_daterange"] ? errorMessage["train_daterange"].from : undefined}
                             />
                             <DateTime
-                                label="Train date range to"
+                                label="Train to"
                                 nameField="to"
                                 placeholder="01/06/2019 00:00:00"
-                                description="Data train end at"
+                                description="Train daterange to"
                                 formData={this.state.formData}
                                 value={this.state.formData.to}
                                 onChange={this.onChangeDataOfFields}
@@ -463,7 +463,7 @@ export default class RunGekko extends Component {
                                 label="Mail tag"
                                 nameField="mailTag"
                                 placeholder="[GEKKO]"
-                                description="Prefix the email"
+                                description="Email subject prefix"
                                 formData={this.state.formData}
                                 value={this.state.formData.mailTag}
                                 onChange={this.onChangeDataOfFields}
@@ -472,10 +472,10 @@ export default class RunGekko extends Component {
                                 errorMessage={errorMessage["mailTag"]}
                             />
                             <Number
-                                label="Amount for one trade"
+                                label="Amount per trade"
                                 nameField="amountForOneTrade"
                                 placeholder="100"
-                                description="Gekko will buy 100 currency if it is 100. Unit is currency"
+                                description="Amount to buy per trade. Unit: currency"
                                 formData={this.state.formData}
                                 value={this.state.formData.amountForOneTrade}
                                 onChange={this.onChangeDataOfFields}
@@ -499,10 +499,10 @@ export default class RunGekko extends Component {
                                 errorMessage={errorMessage["mode"]}
                             />
                             {this.state.formData.mode === 'paper' && <Number
-                                label="Init asset"
+                                label="Initial asset"
                                 nameField="asset"
                                 placeholder="0"
-                                description="Asset of paper trading. Unit is asset"
+                                description="Amount of initial asset for papertrading. Unit: asset"
                                 formData={this.state.formData}
                                 value={this.state.formData.asset}
                                 onChange={this.onChangeDataOfFields}
@@ -511,10 +511,10 @@ export default class RunGekko extends Component {
                                 errorMessage={errorMessage["asset"]}
                             />}
                             {this.state.formData.mode === 'paper' && <Number
-                                label="Init currency"
+                                label="Initial currency"
                                 nameField="currency"
                                 placeholder="5000"
-                                description="Currency of paper trading. Unit is currency"
+                                description="Amount of initial currency for papertrading. Unit: currency"
                                 formData={this.state.formData}
                                 value={this.state.formData.currency}
                                 onChange={this.onChangeDataOfFields}
@@ -526,7 +526,7 @@ export default class RunGekko extends Component {
                                 label="Key"
                                 nameField="key"
                                 placeholder="API KEY"
-                                description="Key of binance, gekko will use it for trading"
+                                description="Binance API key used in live trading"
                                 formData={this.state.formData}
                                 value={this.state.formData.key}
                                 onChange={this.onChangeDataOfFields}
@@ -538,7 +538,7 @@ export default class RunGekko extends Component {
                                 label="Secret"
                                 nameField="secret"
                                 placeholder="SECRET KEY"
-                                description="Secret of binance, gekko will use it for trading"
+                                description="Binance secret key"
                                 formData={this.state.formData}
                                 value={this.state.formData.secret}
                                 onChange={this.onChangeDataOfFields}

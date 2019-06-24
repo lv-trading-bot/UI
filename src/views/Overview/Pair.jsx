@@ -22,9 +22,12 @@ class Pair extends Component {
 
         let listStatus = this.props.props_status.statuss;
         let status = _.find(listStatus, stt => stt.id === id) || {status: "unknown"};
+        // return (status.status.toLowerCase() === "connected") ?
+        //     (<Badge color="success" title={status.status} pill>{" "}</Badge>)
+        //     : (<Badge color="danger" title={status.status} pill>{ }</Badge>)
         return (status.status.toLowerCase() === "connected") ?
-            (<Badge color="success">{status.status}</Badge>)
-            : (<Badge color="danger">{status.status}</Badge>)
+            (<i className="fa fa-circle text-success" title={status.status}></i>)
+            : (<i className="fa fa-circle text-danger" title={status.status}></i>)
     }
 
     renderPairControl = (id, asset_name, currency_name) => {
@@ -41,17 +44,17 @@ class Pair extends Component {
 
         let listRes = [];
         listRes.push(<td 
-            style={{cursor: "pointer"}}
+            style={{cursor: "pointer", textAlign: "center"}}
             key={"accep_buy"}
             onClick={() => this.props.putPairControl(id, asset_name, currency_name, !pairControl.accept_buy, 'User')}
             >
                 {(pairControl.accept_buy) ?
-                (<Badge color="success">true</Badge>)
-                : (<Badge color="danger">false</Badge>)}
+                (<Badge color="success" title={moment(pairControl.last_update).format("DD-MM-YYYY HH:mm")}>true</Badge>)
+                : (<Badge color="danger" title={moment(pairControl.last_update).format("DD-MM-YYYY HH:mm")}>false</Badge>)}
             </td>)
 
         listRes.push(<td key={"set_by"}>{pairControl.set_by}</td>);
-        listRes.push(<td key={"last_update"}>{moment(pairControl.last_update).format("DD-MM-YYYY HH:mm")}</td>);
+        // listRes.push(<td key={"last_update"}>{moment(pairControl.last_update).format("DD-MM-YYYY HH:mm")}</td>);
 
         let listStatus = this.props.props_status.statuss;
         let status = _.find(listStatus, stt => stt.id === id) || {status: "unknown"};
@@ -59,7 +62,7 @@ class Pair extends Component {
         let actionEl = null;
         if(!this.props.gekko.isLoading) {
             actionEl = (
-                <td key={"action"}>
+                <td key={"action"} style={{textAlign: "center"}}>
                     {status.containerName 
                     ? (status.status.toLowerCase() === "connected") 
                         ? (<Badge 
@@ -85,14 +88,17 @@ class Pair extends Component {
     render() {
         return (
             <tr>
-                <td onClick={this.props.onClick} style={{cursor: "pointer"}}>{this.props.id}</td>
+                <td onClick={this.props.onClick} style={{cursor: "pointer"}}>
+                    {this.renderStatus(this.props.id)}{" " + this.props.id}
+                </td>
+                <td onClick={this.props.onClick} style={{cursor: "pointer"}}>{moment(this.props.startTime).format("DD-MM-YYYY HH:mm")}</td>
                 <td onClick={this.props.onClick} style={{cursor: "pointer"}}>{`${this.props.asset_name}_${this.props.currency_name}`}</td>
                 <td onClick={this.props.onClick} style={{cursor: "pointer"}}>{`${this.props.asset.toLocaleString()} ${this.props.asset_name}`}</td>
                 <td onClick={this.props.onClick} style={{cursor: "pointer"}}>{`${this.props.currency.toLocaleString()} ${this.props.currency_name}`}</td>
-                <td onClick={this.props.onClick} style={{cursor: "pointer"}}>{this.props.price.toLocaleString()}</td>
+                <td onClick={this.props.onClick} style={{cursor: "pointer"}} title={moment(this.props.last_update).fromNow()}>{this.props.price.toLocaleString()}</td>
                 <td onClick={this.props.onClick} style={{cursor: "pointer"}}>{`${(this.props.currency + this.props.asset * this.props.price).toLocaleString()} ${this.props.currency_name}`}</td>
-                <td onClick={this.props.onClick} style={{cursor: "pointer"}}>{moment(this.props.last_update).fromNow()}</td>
-                <td onClick={this.props.onClick} style={{cursor: "pointer"}}>{this.renderStatus(this.props.id)}</td>
+                {/* <td onClick={this.props.onClick} style={{cursor: "pointer"}}>{moment(this.props.last_update).fromNow()}</td> */}
+                {/* <td onClick={this.props.onClick} style={{cursor: "pointer", textAlign: "center"}}>{this.renderStatus(this.props.id)}</td> */}
                 {this.renderPairControl(this.props.id, this.props.asset_name, this.props.currency_name)}
             </tr>
         )

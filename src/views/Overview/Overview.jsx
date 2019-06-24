@@ -54,16 +54,17 @@ class Overview extends Component {
                   <thead>
                     <tr>
                       <th>Id</th>
+                      <th>Start Time</th>
                       <th>Pair</th>
                       <th>Asset</th>
                       <th>Currency</th>
                       <th>Price</th>
                       <th>Estimated Balance</th>
-                      <th>Last update</th>
-                      <th>Status</th>
+                      {/* <th>Last update</th> */}
+                      {/* <th>Status</th> */}
                       <th>Accept Buy</th>
                       <th>Set By</th>
-                      <th>Last Change</th>
+                      {/* <th>Last Change</th> */}
                       <th>Action</th>
                     </tr>
                   </thead>
@@ -71,6 +72,7 @@ class Overview extends Component {
                     {_.map(this.props.portfolios, (pair, index) => (<Pair
                       key={index}
                       id={pair.id}
+                      startTime={pair.startTime}
                       asset={pair.asset}
                       currency={pair.currency}
                       asset_name={pair.asset_name}
