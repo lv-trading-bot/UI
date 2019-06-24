@@ -7,6 +7,7 @@ import { expiredPortfolio } from '../actions/Overview';
 import { expiredStatus } from '../actions/Status';
 import { expiredTrade } from '../actions/Trade';
 import { expiredTrigger } from '../actions/Trigger';
+import { expiredPairControl } from '../actions/PairControl';
 
 class Socket extends React.Component {
     componentDidMount() {
@@ -31,8 +32,11 @@ class Socket extends React.Component {
                     break;
                 case "NEW_SYSTEM_CONNECTED":
                 case "SYSTEM_DISCONNECTED":
-                    this.props.dispatch(expiredConfig(data.id, data.asset, data.currency));
-                    this.props.dispatch(expiredStatus(data.id, data.asset, data.currency));
+                    setTimeout(() => {
+                        this.props.dispatch(expiredConfig(data.id, data.asset, data.currency));
+                        this.props.dispatch(expiredStatus(data.id, data.asset, data.currency));
+                        this.props.dispatch(expiredPairControl());
+                    }, 5000);
                     break;
                 default:
                     break;

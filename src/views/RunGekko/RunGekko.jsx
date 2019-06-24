@@ -7,6 +7,7 @@ import Option from './Fields/Option';
 import DateTime from './Fields/DateTime';
 import Json from './Fields/Json';
 import _ from 'lodash';
+import BacktestResult from './BacktestResult';
 
 const paramsTypeOfPostRunGekko = {
     asset_name: (val, body, key) => (
@@ -51,7 +52,26 @@ const paramsTypeOfPostRunGekko = {
     //     !_.isEmpty(val) ? undefined : `${key} is required`
     // ),
     train_daterange: (val, body, key) => {
-        return _.isObject(val) && !_.isEmpty(val.from) && !_.isEmpty(val.to) ? undefined : `${key} is not valid`
+        let res = { from: undefined, to: undefined };
+
+        if (_.isEmpty(val.from)) {
+            res.from = `${key}.from is required`;
+        } else if ((new Date(val.from)).getTime() > (new Date())) {
+            res.from = `${key}.from must be before now`;
+        }
+
+        if (_.isEmpty(val.to)) {
+            res.to = `${key}.to is required`;
+        } else if ((new Date(val.to)).getTime() > (new Date())) {
+            res.to = `${key}.to must be before now`;
+        }
+
+        if (!_.isEmpty(val.to) && !_.isEmpty(val.from)) {
+            if ((new Date(val.to)).getTime() < (new Date(val.from)).getTime()) {
+                res.to = `${key}.to must be after ${key}.from`;
+            }
+        }
+        return res;
     },
     rolling_step: (val, body, key) => (
         !_.isNaN(parseFloat(val)) ? undefined : `${key} is not valid`
@@ -91,8 +111,15 @@ export default class RunGekko extends Component {
                 label: "omlbct",
                 features: `["open", "high", "low", "close", "volume", "trades"]`
             },
-            isSubmitting: false
+            isSubmitting: false,
+            backtest: {
+                isBacktest: false
+            }
         };
+    }
+
+    componentDidMount() {
+        this.props.resetBacktest();
     }
 
     renderLoading = () => <div className="animated fadeIn pt-1 text-center text-success">Loading...</div>
@@ -113,12 +140,20 @@ export default class RunGekko extends Component {
     }
 
     backtest = () => {
+        // this.setState({ isSubmitting: true, backtestMode: true }, () => {
+        //     let config = this.transformToDataPost(this.state.formData);
+        //     let { isValid } = this.checkValidForm(config);
+        //     if (isValid) {
+        //         this.props.pushFromDataToBacktest(config);
+        //         setTimeout(() => this.props.history.push('/backtest'), 1000)
+        //     }
+        // })
+
         this.setState({ isSubmitting: true }, () => {
             let config = this.transformToDataPost(this.state.formData);
             let { isValid } = this.checkValidForm(config);
             if (isValid) {
-                this.props.pushFromDataToBacktest(config);
-                setTimeout(() => this.props.history.push('/backtest'), 1000)
+                this.setState({ backtest: { ...this.state.backtest, isBacktest: true }});
             }
         })
     }
@@ -198,7 +233,13 @@ export default class RunGekko extends Component {
     checkValidForm = (transformedFormData) => {
         let errorMessage = {}, isValid = true;
         for (let key in paramsTypeOfPostRunGekko) {
-            if (paramsTypeOfPostRunGekko[key](transformedFormData[key], transformedFormData, key)) {
+            if (key === 'train_daterange') {
+                let res = paramsTypeOfPostRunGekko[key](transformedFormData[key], transformedFormData, key);
+                if (res.from || res.to) {
+                    isValid = false;
+                    errorMessage[key] = paramsTypeOfPostRunGekko[key](transformedFormData[key], transformedFormData, key)
+                }
+            } else if (paramsTypeOfPostRunGekko[key](transformedFormData[key], transformedFormData, key)) {
                 isValid = false;
                 errorMessage[key] = paramsTypeOfPostRunGekko[key](transformedFormData[key], transformedFormData, key)
             }
@@ -210,16 +251,8 @@ export default class RunGekko extends Component {
     }
 
     render() {
-        // let arrFeatures = [];
-        // try {
-        //     arrFeatures = JSON.parse(this.state.formData.features);
-        //     arrFeatures = _.filter(arrFeatures, feature => (_.isString(feature) && !_.isEmpty(feature)) || (_.isString(feature.name) && !_.isEmpty(feature.name) && _.isObject(feature.params)));
-        // } catch (error) {
-
-        // }
-
-
-        let { errorMessage } = this.checkValidForm(this.transformToDataPost(this.state.formData));
+        let dataTransform = this.transformToDataPost(this.state.formData);
+        let { errorMessage, isValid } = this.checkValidForm(dataTransform);
 
         return (
             <Row>
@@ -410,9 +443,9 @@ export default class RunGekko extends Component {
                                 formData={this.state.formData}
                                 value={this.state.formData.from}
                                 onChange={this.onChangeDataOfFields}
-                                isError={!_.isEmpty(errorMessage["train_daterange"])}
+                                isError={errorMessage["train_daterange"] && !_.isEmpty(errorMessage["train_daterange"].from)}
                                 isSubmitting={this.state.isSubmitting}
-                                errorMessage={errorMessage["train_daterange"]}
+                                errorMessage={errorMessage["train_daterange"] ? errorMessage["train_daterange"].from : undefined}
                             />
                             <DateTime
                                 label="Train date range to"
@@ -422,9 +455,9 @@ export default class RunGekko extends Component {
                                 formData={this.state.formData}
                                 value={this.state.formData.to}
                                 onChange={this.onChangeDataOfFields}
-                                isError={!_.isEmpty(errorMessage["train_daterange"])}
+                                isError={errorMessage["train_daterange"] && !_.isEmpty(errorMessage["train_daterange"].to)}
                                 isSubmitting={this.state.isSubmitting}
-                                errorMessage={errorMessage["train_daterange"]}
+                                errorMessage={errorMessage["train_daterange"] ? errorMessage["train_daterange"].to : undefined}
                             />
                             <Text
                                 label="Mail tag"
@@ -519,11 +552,17 @@ export default class RunGekko extends Component {
                         </CardBody>
                         <CardFooter>
                             <div style={{ textAlign: "right" }}>
-                                <Button type="button" size="sm" color="primary" onClick={this.backtest}>{/*<i className="fa fa-dot-circle-o"></i>*/}Backtest</Button>
+                                {!this.state.backtest.isBacktest && <Button type="button" size="sm" color="primary" onClick={this.backtest}>{/*<i className="fa fa-dot-circle-o"></i>*/}Backtest</Button>}
                                 <Button type="button" size="sm" color="danger" onClick={this.runGekko}>{/*<i className="fa fa-ban"></i>*/}Run</Button>
                             </div>
                         </CardFooter>
                     </Card>
+                    {this.state.backtest.isBacktest && 
+                        <BacktestResult 
+                        formData={dataTransform} 
+                        isValidFormData={isValid}
+                        backtest={this.props.runBacktest} 
+                        {...this.props.backtest}/>}
                 </Col>
             </Row>
         )
