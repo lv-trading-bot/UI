@@ -562,59 +562,10 @@ export default class RunGekko extends Component {
                             </div>
                         </CardFooter>
                     </Card>
-                    {/* {this.state.backtest.isBacktest && 
+                    {this.state.backtest.isBacktest && 
                         <BacktestResult 
                         formData={dataTransform} 
                         isValidFormData={isValid}
-                        backtest={this.props.runBacktest} 
-                        {...this.props.backtest}/>} */}
-                    {
-                        <BacktestResult 
-                        formData={{
-                            "asset_name": "BTC",
-                            "currency_name": "USDT",
-                            "candleSize": 60,
-                            "stopLoss": -10,
-                            "takeProfit": 2,
-                            "amountForOneTrade": 100,
-                            "expirationPeriod": 24,
-                            "decisionThreshold": 0.5,
-                            "stopTradeLimit": -100,
-                            "breakDuration": -1,
-                            "model_type": "rolling",
-                            "model_name": "random_forest",
-                            "lag": 23,
-                            "features": ["start", "open", "high", "low", "close", "trades", "volume",
-                                {
-                                    "name": "omlbct",
-                                    "params": {
-                                        "takeProfit": 2,
-                                        "stopLoss": -10,
-                                        "expirationPeriod": 24
-                                    }
-                                },
-                                {
-                                    "name": "TREND_BY_DI",
-                                    "params": {
-                                        "period": 14
-                                    }
-                                }
-                            ],
-                            "label": "omlbct",
-                            "train_daterange": {
-                                "from": "2019-01-01T00:00:00.000Z",
-                                "to": "2019-02-01T00:00:00.000Z"
-                            },
-                            "backtest_daterange": {
-                                "from": "2019-01-01T00:00:00.000Z",
-                                "to": "2019-01-02T00:00:00.000Z"
-                            },
-                            "rolling_step": 720,
-                            "mode": "paper",
-                            "asset": 0,
-                            "currency": 7000
-                        }} 
-                        isValidFormData={true}
                         backtest={this.props.runBacktest} 
                         {...this.props.backtest}/>}
                 </Col>

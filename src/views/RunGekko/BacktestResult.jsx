@@ -276,21 +276,10 @@ class BacktestResult extends Component {
 							{this.renderBacktestResult()}
 						</CardBody>
 					</Card>
-					<Card>
-						<CardHeader>
-							<strong><i className="icon-info pr-1"></i>{
-								`visualization`
-							}</strong>
-						</CardHeader>
-						<CardBody>
-							<BacktestChart 
-								roundtrips={this.props.response.roundtrips} 
-								performanceReport={this.props.response.performanceReport}
-								market={this.props.response.market}
-								candleSize={this.props.response.tradingAdvisor.candleSize}
-								/>
-						</CardBody>
-					</Card>
+					<BacktestChart 
+						roundtrips={this.props.response.roundtrips} 
+						candles={this.props.response.candles}
+					/>
 					<Card>
 						<CardHeader>
 							<strong><i className="icon-info pr-1"></i>{

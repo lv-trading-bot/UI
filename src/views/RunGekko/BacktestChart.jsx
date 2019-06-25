@@ -1,13 +1,10 @@
 import React, { Component } from 'react';
 import { Line } from 'react-chartjs-2';
 import { CustomTooltips } from '@coreui/coreui-plugin-chartjs-custom-tooltips';
-import axios from 'axios';
+import { Button, Card, CardBody, CardHeader } from 'reactstrap';
 import _ from 'lodash';
-import moment from 'moment';
-
-const baseUrl = " https://api.binance.com";
-const apiGetKlines = "/api/v1/klines";
-const limit = 1000;
+import 'hammerjs';
+import 'chartjs-plugin-zoom';
 
 const sellPointColor = "#f86c6b", buyPointColor = "#4dbd74", priceColor = "#63c2de";
 
@@ -38,66 +35,18 @@ const options = {
                 labelString: 'Price'
             },
         }],
+    },
+    pan: {
+        enabled: true,
+        mode: 'xy'
+    },
+    zoom: {
+        enabled: true,
+        mode: 'xy'
     }
 }
 
 class Charts extends Component {
-
-    state = {
-        historyPrice: []
-    }
-
-    componentDidMount() {
-        let thisPerformanceReport = this.props.performanceReport;
-        this.loadHistoryPrice(thisPerformanceReport.startTime,
-            thisPerformanceReport.endTime,
-            this.props.candleSize,
-            this.props.market.exchange,
-            this.props.market.asset,
-            this.props.market.currency)
-    }
-
-    componentWillReceiveProps(nextProps) {
-        let thisPerformanceReport = this.props.performanceReport;
-        let nextPerformanceReport = nextProps.performanceReport;
-
-        if (thisPerformanceReport.startTime !== nextPerformanceReport.startTime
-            || this.performanceReport.endTime !== nextPerformanceReport.endTime) {
-            this.loadHistoryPrice(
-                nextPerformanceReport.startTime,
-                nextPerformanceReport.endTime,
-                nextProps.candleSize,
-                nextProps.market.exchange,
-                nextProps.market.asset,
-                nextProps.market.currency);
-        }
-    }
-
-    loadHistoryPrice = (startTime, endTime, candleSize, exchange, asset, currency) => {
-        const convertCandleSize = (_candleSize) => {
-            return "1m";
-        }
-
-        let url = baseUrl + apiGetKlines;
-
-        let reqData = {
-            symbol: `${_.upperCase(asset)}${_.upperCase(currency)}`,
-            startTime: moment(startTime).utc().startOf('minute').utc().unix() * 1000,
-            endTime: moment(endTime).utc().startOf('minute').unix() * 1000 - 1,
-            limit,
-            interval: convertCandleSize(candleSize)
-        }
-
-        axios.get(url, {
-            params: reqData
-        })
-            .then((res) => {
-                debugger;
-            })
-            .catch(err => {
-                debugger;
-            })
-    }
 
     splitRoundtripToBuyAndSell = (roundtrips) => {
         let buys = [], sells = [];
@@ -108,9 +57,18 @@ class Charts extends Component {
 
         return { buys, sells }
     }
+
+    mapCandlesToDateAndPrice = (candles) => {
+        return _.map(candles, candle => {
+            return {
+                x: candle.start,
+                y: candle.close
+            }
+        })
+    }
     render() {
         let { buys, sells } = this.splitRoundtripToBuyAndSell(this.props.roundtrips || []);
-        console.log(this.props.performanceReport)
+        let candlesForVisualization = this.mapCandlesToDateAndPrice(this.props.candles || []);
         let line = {
             datasets: [
                 {
@@ -176,15 +134,32 @@ class Charts extends Component {
                     pointHoverBorderWidth: 2,
                     pointRadius: 1,
                     pointHitRadius: 10,
-                    data: this.state.historyPrice,
+                    data: candlesForVisualization,
                     showLine: true
                 },
             ],
         };
         return (
-            <div className="chart-wrapper">
-                <Line data={line} options={options} height={500} />
-            </div>
+            <Card>
+                <CardHeader className="d-flex justify-content-between align-items-center">
+                    <strong><i className="icon-info pr-1"></i>{
+                        `visualization`
+                    }</strong>
+                    <Button 
+                        outline 
+                        color="primary" 
+                        title="Reset zoom" 
+                        onClick={() => { this.chartRef.chartInstance.resetZoom()}}
+                    >
+                        <i className="icon-refresh icons"></i>
+                    </Button>
+                </CardHeader>
+                <CardBody>
+                    <div className="chart-wrapper">
+                        <Line data={line} options={options} height={500} ref={ref => this.chartRef = ref} />
+                    </div>
+                </CardBody>
+            </Card>
         );
     }
 }
