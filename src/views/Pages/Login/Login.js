@@ -57,7 +57,7 @@ class Login extends Component {
 							<CardGroup>
 								<Card className="p-4">
 									<CardBody>
-										<Form>
+										<Form onSubmit={e => {this.onSubmit(); e.preventDefault() }}>
 											<h1>Login</h1>
 											<p className="text-muted">Sign In to your account</p>
 											<InputGroup className="mb-3">
@@ -67,6 +67,7 @@ class Login extends Component {
 													</InputGroupText>
 												</InputGroupAddon>
 												<Input
+													name="username"
 													type="text"
 													placeholder="Username"
 													autoComplete="username"
@@ -84,6 +85,7 @@ class Login extends Component {
 													</InputGroupText>
 												</InputGroupAddon>
 												<Input
+													name="password"
 													type="password"
 													placeholder="Password"
 													autoComplete="current-password"
@@ -96,6 +98,7 @@ class Login extends Component {
 											&& <FormText color="danger" className="mb-3">Password is required</FormText>}
 											{this.state.errorMessage 
 											&& <FormText color="danger" className="mb-3">{this.state.errorMessage}</FormText>}
+											<button type="submit" hidden={true}></button>
 											<Row>
 												<Col xs="6">
 													<Button 

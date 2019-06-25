@@ -4,6 +4,7 @@ import ReactJson from 'react-json-view';
 import _ from 'lodash';
 import moment from 'moment';
 import DateTime from '../RunGekko/Fields/DateTime';
+import BacktestChart from './BacktestChart';
 
 class BacktestResult extends Component {
 
@@ -222,7 +223,7 @@ class BacktestResult extends Component {
 	}
 
 	renderRoundTrip = () => {
-		let triggerList = this.props.response.roundtrips;;
+		let triggerList = this.props.response.roundtrips;
 		return (
 			<Table responsive striped>
 				<thead>
@@ -273,6 +274,21 @@ class BacktestResult extends Component {
 						</CardHeader>
 						<CardBody>
 							{this.renderBacktestResult()}
+						</CardBody>
+					</Card>
+					<Card>
+						<CardHeader>
+							<strong><i className="icon-info pr-1"></i>{
+								`visualization`
+							}</strong>
+						</CardHeader>
+						<CardBody>
+							<BacktestChart 
+								roundtrips={this.props.response.roundtrips} 
+								performanceReport={this.props.response.performanceReport}
+								market={this.props.response.market}
+								candleSize={this.props.response.tradingAdvisor.candleSize}
+								/>
 						</CardBody>
 					</Card>
 					<Card>

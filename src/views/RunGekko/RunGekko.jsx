@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Row, Col, Card, CardHeader, CardBody, CardFooter, Button } from 'reactstrap';
+import { Row, Col, Card, CardHeader, CardBody, CardFooter, Button, FormText } from 'reactstrap';
 import moment from 'moment';
 import Text from './Fields/Text';
 import Number from './Fields/Number';
@@ -419,6 +419,11 @@ export default class RunGekko extends Component {
                                 isSubmitting={this.state.isSubmitting}
                                 errorMessage={errorMessage["features"]}
                             />
+                            <Row className="mb-4">
+                                <Col xs="12" md={{size: 9, offset: 3}}>
+                                    <a target="_blank" rel="noopener noreferrer" href="https://github.com/lv-trading-bot/DB-Server/blob/develop/README.md"><FormText color="muted">Details of features</FormText></a>
+                                </Col>
+                            </Row>
                             {/* <Option
                                 label="Label"
                                 nameField="label"
@@ -557,10 +562,59 @@ export default class RunGekko extends Component {
                             </div>
                         </CardFooter>
                     </Card>
-                    {this.state.backtest.isBacktest && 
+                    {/* {this.state.backtest.isBacktest && 
                         <BacktestResult 
                         formData={dataTransform} 
                         isValidFormData={isValid}
+                        backtest={this.props.runBacktest} 
+                        {...this.props.backtest}/>} */}
+                    {
+                        <BacktestResult 
+                        formData={{
+                            "asset_name": "BTC",
+                            "currency_name": "USDT",
+                            "candleSize": 60,
+                            "stopLoss": -10,
+                            "takeProfit": 2,
+                            "amountForOneTrade": 100,
+                            "expirationPeriod": 24,
+                            "decisionThreshold": 0.5,
+                            "stopTradeLimit": -100,
+                            "breakDuration": -1,
+                            "model_type": "rolling",
+                            "model_name": "random_forest",
+                            "lag": 23,
+                            "features": ["start", "open", "high", "low", "close", "trades", "volume",
+                                {
+                                    "name": "omlbct",
+                                    "params": {
+                                        "takeProfit": 2,
+                                        "stopLoss": -10,
+                                        "expirationPeriod": 24
+                                    }
+                                },
+                                {
+                                    "name": "TREND_BY_DI",
+                                    "params": {
+                                        "period": 14
+                                    }
+                                }
+                            ],
+                            "label": "omlbct",
+                            "train_daterange": {
+                                "from": "2019-01-01T00:00:00.000Z",
+                                "to": "2019-02-01T00:00:00.000Z"
+                            },
+                            "backtest_daterange": {
+                                "from": "2019-01-01T00:00:00.000Z",
+                                "to": "2019-01-02T00:00:00.000Z"
+                            },
+                            "rolling_step": 720,
+                            "mode": "paper",
+                            "asset": 0,
+                            "currency": 7000
+                        }} 
+                        isValidFormData={true}
                         backtest={this.props.runBacktest} 
                         {...this.props.backtest}/>}
                 </Col>
