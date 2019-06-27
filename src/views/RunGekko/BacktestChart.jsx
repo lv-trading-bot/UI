@@ -155,8 +155,8 @@ class Charts extends Component {
                     </Button>
                 </CardHeader>
                 <CardBody>
-                    <div className="chart-wrapper">
-                        <Line data={line} options={options} height={500} ref={ref => this.chartRef = ref} />
+                    <div className="chart-wrapper" style={{height: '500px'}}>
+                        <Line data={line} options={options} ref={ref => this.chartRef = ref} />
                     </div>
                 </CardBody>
             </Card>
